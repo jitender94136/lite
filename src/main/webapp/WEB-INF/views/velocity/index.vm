@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <!-- Generated: 2018-04-06 16:27:42 +0200 -->
+    <title>Central park</title>
+       <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+    			google.charts.load('current', {packages: ['corechart', 'bar']});
+    </script>
+    <script src="/assets/js/require.min.js"></script>
+    <script>
+      requirejs.config({
+          baseUrl: '/'
+      });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/assets/css/dashboard.css" rel="stylesheet" />
+    <script src="/assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="/assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Google Maps Plugin -->
+    <link href="/assets/plugins/maps-google/plugin.css" rel="stylesheet" />
+    <script src="/assets/plugins/maps-google/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/assets/plugins/input-mask/plugin.js"></script>
+    
+    
+    <script  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfoya9aCxV49DMNbLedvbsIo4tbRg_lg4"></script>  
+   
+    
+    
+  <!--  <script  type="text/javascript"  charset="utf-8">  
+		    (function(w,d,t,f){  w[f]=w[f]||function(c,k,n){s=w[f],k=s['k']=(s['k']||(k?('&k='+k):''));s['c']=  
+		    c=(c  instanceof  Array)?c:[c];s['n']=n=n||0;L=d.createElement(t),e=d.getElementsByTagName(t)[0];  
+		    L.async=1;L.src='//feed.aqicn.org/feed/'+(c[n].city)+'/'+(c[n].lang||'')+'/feed.v1.js?n='+n+k;  
+		    e.parentNode.insertBefore(L,e);  };  })(  window,document,'script','_aqiFeed'  );    
+   </script>
+		   
+   <script  type="text/javascript"  charset="utf-8">  
+		   _aqiFeed({  container:"city-aqi-container",  city:"india/gurgaon/vikas-sadan-gurgaon"  , display: '%details'});  
+   </script>
+   -->
+   <script type="text/javascript">
+   
+   function makeAjaxCall(url, methodType,centralParkData) {
+	      var promiseObj = new Promise(function(resolve, reject){
+	      var xhr = new XMLHttpRequest();
+	      xhr.open(methodType, url, true);
+	      xhr.send();
+	      xhr.onreadystatechange = function(){
+	      if (xhr.readyState === 4){
+	         if (xhr.status === 200){
+	            var resp = xhr.responseText;
+	            var respJson = JSON.parse(resp);
+	            console.log(respJson);
+	            console.log('central park data',centralParkData);
+	            resolve([respJson,centralParkData]);
+	         } else {
+	            reject(xhr.status);
+	            console.log("xhr failed");
+	         }
+	      } else {
+	         console.log("xhr processing going on");
+	      }
+	   }
+	   console.log("request sent succesfully");
+	 });
+	 return promiseObj;
+} 
+   
+   require(['jquery'], function($) {
+    	$(document).ready(function(){
+    		google.charts.setOnLoadCallback(function() {
+								$.ajax({
+    								type : 'GET',
+    								url : 'getCurrentDayRecords',
+    								success : function(data) {
+    												var finalData = data;
+    												drawPM2Trendlines(finalData);
+        											drawPM10Trendlines(finalData);
+        											drawTempTrendlines(finalData);
+        											drawHumidityTrendlines(finalData);
+        											//drawo3Trendlines(finalData);
+        											drawCOTrendlines(finalData);
+        											drawSO2Trendlines(finalData);
+        											drawNOTrendlines(finalData);
+    											console.log(finalData);
+    											generatePM10Chart(finalData);
+    											generateTempChart(finalData);
+    											
+    								}
+    							}); 
+    		});	
+    			
+    		$.ajax({
+    			type : 'GET',
+				url : 'getPM25TrendData',
+				success : function(data) {
+    				console.log('the response from ajax request....');
+    				console.log(data);
+    				makeAjaxCall("https://api.openaq.org/v1/measurements?country=IN&city=Delhi&limit=50","GET",data).then(generatePM2Chart, errorHandler);
+				}
+    		});
+    	});
+  });
+   
+   
+     function errorHandler(statusCode){
+	   console.log("failed with status", status);
+	 }
+   </script>
+   
+   
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"  />
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext"  />
+
+   
+  </head>
+  <body >
+   
+    <div class="page">
+      <div class="page-main">
+      <!--start header-->
+        <div class="header">
+          <div class="container">
+            <div class="d-flex">
+            
+                <img src="/assets/images/logo.jpg" class="header-brand-img" alt="tabler logo">
+          
+              <div class="d-flex order-lg-2 ml-auto">
+                <div class="nav-item  d-md-flex">
+               &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <img src="/assets/images/logo.png" class="header-brand" alt="tabler logo"> 
+                   <img src="/assets/images/new_circle.png" class="header-brand" alt="tabler logo">
+                </div>
+                
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <!--end header-->
+        
+        
+        <!--after nav start-->
+        <div class="">
+          <div class="container">
+            
+            <div class="row row-cards">
+              
+           
+             
+              
+             
+              <div class="col-lg-6">
+                <div class="card">
+                  
+                  <!--<div id="chart-development-activity" style="height: 10rem"> </div>-->
+                  <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3508.834055448166!2d77.0334933144515!3d28.42426370022855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1875140cc83f%3A0xdcdcecdf54cb6ebe!2sCentral+Park+Resorts!5e0!3m2!1sen!2sin!4v1529747410176"
+                   width="100%" height="275" frameborder="0" style="border:0" allowfullscreen></iframe> -->
+                   		<!-- <h3  style="padding:5px;text-align:center">   PM2.5 AQI Figures </h3> -->
+                   <div  id='map'  width="100%" class="map_1">  </div>  
+                </div>
+               
+              </div>
+              <!--chk-->
+              <div class="col-lg-6" style="background-color:white">
+                <div class="row">
+                				<!--
+                				<span style="width:100%" id="city-aqi-container"></span> 
+                				  --> 
+                				<!--
+			                	<table border="1" width="100%"     bgcolor="#FFFFFF" bordercolor="#CDCDCD" class="currenttable">
+			                    <tr>
+			                    <td colspan="3"><span ><strong>Snapshot of</strong> </span> &nbsp; $!record.timestamp  </td>
+			                    </tr>
+			                    <tr>
+			                    <td ><h4>PM1</h4> $!record.pm1 <span>ug/m3</span></td>
+			                    <td ><h4>PM2.5</h4> $!record.pm2 <span>ug/m3</span></td>
+			                    <td ><h4>PM10</h4> $!record.pm10 <span>ug/m3</span></td>
+			                    </tr>
+			                    <tr>
+			                    <td ><h4>Temp.</h4> $!record.temp <span>&#176;  C</span></td>
+			                    <td  ><h4>Humidity</h4> $!record.hum <span>%</span></td>
+			                    <td  ><h4>O3</h4> $!record.o3 <span>ug/m3</span></td>
+			                    </tr>
+			                    <tr>
+			                    <td ><h4>CO</h4> $!record.co <span> mg/m3</span></td>
+			                    <td  ><h4>SO2</h4> $!record.so2 <span> ug/m3</span></td>
+			                    <td  ><h4>NO</h4> $!record.no2 <span> ug/m3</span></td>
+			                    </tr>
+			                    </table>
+			                    -->
+			                    <table  width="100%"     bgcolor="#FFFFFF"  class="currenttable">
+			                    <tr>
+			                    <td colspan="3"><span><strong>Snapshot of</strong> </span> &nbsp; $!record.timestamp  </td>
+			                    </tr></table>
+			                    <table width="100%" class="currenttable">
+					                    <tr>
+					                    
+							                    <td width="78%">
+							                    		<div id="chart_div_1" style="width:100%;height:80px;margin-bottom:0px;"> </div> 
+							                    </td>
+							                    <td width="21%"><span><strong>PM2.5 AQI</span> <br/>$!record.pm2</strong> <span>&micro;g/m<sup>3</sup></span></td>
+					                    </tr>
+			                    </table>
+			                    
+			                    <table width="100%" class="currenttable" >
+			                    	<tr>
+						                            <td width="78%">
+								                    		<div id="chart_div_2" style="width:100%;height:80px;margin-bottom:0px;"> </div>
+								                    </td>
+								                    <td width="21%"><span><strong>PM10 AQI</span> <br/>$!record.pm10 </strong> <span>&micro;g/m<sup>3</sup></span></td>
+						             </tr>
+				                 </table>
+				                 <table width="100%" class="currenttable"> 
+			                    	<tr>
+						                     <td width="78%">       		
+					                    		<div id="chart_div_3" style="width:100%;height:80px;margin-bottom:0px;"> </div>
+					                    		</td>
+							                    <td width="21%"><span><strong>Temp. </span> <br/> $!record.temp </strong><span>&deg;c</span></td>
+					             </tr>
+			                 </table>
+			                 
+			                 
+			                 <table width="100%" class="currenttable">
+		                    	<tr>
+					                     <td width="78%">  
+			                    <div id="chart_div_4" style="width:100%;height:80px;margin-bottom:0px;"> </div>
+			                    </td>
+			                    <td width="21%"><span><strong>Humidity</span> </br> $!record.hum</strong> <span>%</span></td>
+				             </tr>
+			             </table>
+			                    <!-- <div id="chart_div_5" style="width:100%;height:80px;margin-bottom:0px;"> </div> -->
+			              <table width="100%" class="currenttable">
+		                    	<tr>
+					                     <td width="80%">        
+			                    <div id="chart_div_6" style="width:100%;height:80px;margin-bottom:0px;"> </div>
+			                    </td>
+			                    <td width="21%"><span><strong>CO</span> <br/>$!record.co</strong> <span>mg/m<sup>3</sup></span>  </td>
+				             </tr>
+			             </table>
+			             <table width="100%" class="currenttable">
+	                    	<tr>
+				                 <td width="78%">     
+				                 			<div id="chart_div_7" style="width:100%;height:80px;margin-bottom:0px;"> </div>
+			                    
+	                 		   </td>
+			                    <td width="21%"><span><strong>SO2</span> <br/> $!record.so2 </strong><span>&micro;g/m<sup>3</sup></span> </td>
+				             </tr>			
+				             </table>     	
+				             
+				             <table width="100%" class="currenttable"> 
+		                    	<tr>
+					                 <td width="78%" > 
+				                 			<div id="chart_div_8" style="width:100%;height:80px;margin-bottom:0px;"> </div>
+				                 		   
+					                 		   </td>
+							                    <td width="21%"><span><strong>NO</span> <br/> $!record.no2 </strong><span>&micro;g/m<sup>3</sup></span></td>
+								             </tr>			
+								             </table>     
+			                 
+			                    
+                    </div>
+                    
+                    
+                    </div></div></div></div>
+              <!--after nav end-->
+             
+            
+               
+               <!--start chart data-->
+               <!--ist-->
+               <div class="my-3 my-md-5">
+          <div class="container">
+            <h3 class="card-title">Data Trends</h3>
+            <div class="row row-cards">
+              <div class="col-lg-6 col-xl-4">
+                <div class="card">
+                 <div class="card-header">
+                    <h3 class="card-title">PM2.5</h3>
+<table align="right" width="100%"> 
+                    
+                    <tr align="right">
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td bgcolor="green" class="legend" >Central Park	</td>
+                    <td bgcolor="orange"  class="legend">Gurgaon	</td>
+                    <td bgcolor="blue" class="legend" >Delhi	</td>
+                    </tr>
+                    </table>
+                  </div><br>
+<!--for  filter-->
+<!--
+                 <div class="form-group">
+                     
+                        <div class="selectgroup w-100">
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="50" class="selectgroup-input" checked="">
+                            <span class="selectgroup-button">1 day</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="100" class="selectgroup-input">
+                            <span class="selectgroup-button">5 day</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="150" class="selectgroup-input">
+                            <span class="selectgroup-button">7 day</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="200" class="selectgroup-input">
+                            <span class="selectgroup-button">1 month</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="200" class="selectgroup-input">
+                            <span class="selectgroup-button">1 year</span>
+                          </label>
+                        </div>
+                        </div> 
+                        -->
+                 <!--end filter-->
+                  <div class="card-body">
+                    <div id="chart-employment" style="height: 16rem"></div>
+                  </div>
+                </div>
+       <script type="text/javascript">
+       
+       var  map  =  new  google.maps.Map(document.getElementById('map'),  {  
+           center:  new  google.maps.LatLng(28.561851368580204,77.1098397148437),  
+           mapTypeId:  google.maps.MapTypeId.ROADMAP,  
+           zoom:  10 
+       });  
+
+        var  t  =  new  Date().getTime();  
+		var  waqiMapOverlay  =  new  google.maps.ImageMapType({  
+		           getTileUrl:  function(coord,  zoom)  {  
+		                     return  'https://tiles.waqi.info/tiles/usepa-pm25/'  +  zoom  +  "/"  +  coord.x  +  "/"  +  coord.y  +  ".png?token=40e7414b4c2fd3621989f6a73c7af5c39588a5b1";  
+		           },  
+		           name:  "Air  Quality",  
+		 });  
+
+		map.overlayMapTypes.insertAt(0,waqiMapOverlay);
+		var centralPark = {lat: 28.424259, lng: 77.035682};
+		var infowindow = new google.maps.InfoWindow({
+	          content: "<strong style='color:#005493; text-align:center;'>Central Park <br/>PM 2.5 AQI <br/> </strong> <font style='color:#f57b20;'>  $!record.pm2</font> <font style='color:#005493;'>  &micro;g/m<sup>3</sup></font>"
+	    });
+
+        var marker = new google.maps.Marker({
+          position: centralPark,
+          map: map,
+          title: 'PM 2.5 AQI'
+        });
+        infowindow.open(map, marker);
+	    
+        google.maps.event.addListener(marker, 'click', function() {
+        	   infowindow.open(map,marker);
+        });
+        
+		function getTimeFormat(timestamp){
+	    	    var splitTime = timestamp.split(":");
+		  		var format = "";
+		  		if( Number(splitTime[0]) >= 0 && Number(splitTime[0]  <= 11)) {
+		  			format = splitTime[0]+":"+splitTime[1]+" AM";
+		  		} else {
+		  			format = splitTime[0]+":"+splitTime[1]+" PM";
+		  		}
+		  		return format;
+	    }
+       
+       function drawPM2Trendlines(dataArr) {
+    	      var my_div = document.getElementById('chart_div_1') ;
+		      var data = new google.visualization.DataTable();
+		      data.addColumn('timeofday', 'Time');
+		      data.addColumn('number', 'PM2.5');
+		      var finalDataArr = [];
+		      for(var key in dataArr) {
+		    	  if(key < 10) {
+		    	  		var rowArr = [];
+		    	  		var timeArr = dataArr[key].timestamp.split(" ")[1].split(":");
+		    	  		timeArr[0] = Number(timeArr[0].replace(/^0+/, ''));
+		    	  		timeArr[1] = Number(timeArr[1].replace(/^0+/, ''));
+		    	  		timeArr[2] = Number(timeArr[2].replace(/^0+/, ''));
+		    	  		rowArr.push({v:timeArr , f:  dataArr[key].timestamp.split(" ")[1].split(":")[0] +":"+ dataArr[key].timestamp.split(" ")[1].split(":")[1] });
+		    	  		rowArr.push(Number(dataArr[key].pm2));	
+		    	  		finalDataArr.push(rowArr);
+		    	  }	
+		  	 }
+		      data.addRows(finalDataArr);
+		      var view = new google.visualization.DataView(data);
+		      view.setColumns([0, 1,
+		                       { calc: "stringify",
+		                         sourceColumn: 1,
+		                         type: "string",
+		                         role: "annotation" }]);
+
+		      var options = {
+		        hAxis: {
+		          //title: 'Time',
+		          format : 'h:mm',
+		         // gridlines: {
+		         //     color: 'transparent'
+		         // }
+		        },
+		        vAxis: {
+		          title: '',
+		        //  gridlines: {
+		        //      color: 'transparent'
+		        //  }
+		        },
+		        enableInteractivity : true,
+		        bar: {
+		            groupWidth: '96%'
+		        },
+		        legend: {position: 'none'},
+		        colors: ['#AB0D06'],
+		        annotations: {
+		            textStyle: {
+		                color: 'black',
+		                fontSize: 9,
+		            },
+		           // alwaysOutside: true
+		       },
+		       chartArea: {
+		    	   top:10,
+		    	   right:0,
+		    	   left:30,
+		    	   bottom:20
+		       }
+		        
+		      };
+
+		      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_1'));
+//		      google.visualization.events.addListener(chart, 'ready', function () {
+//		    	  console.log('in the event');
+//		    	  my_div.innerHTML = '<img src="' + chart.getImageURI() + '"/>';
+//		      });
+		      chart.draw(data, options);
+		     
+	  }
+       function drawPM10Trendlines(dataArr) {
+		      var data = new google.visualization.DataTable();
+		      data.addColumn('timeofday', 'Time');
+		      data.addColumn('number', 'PM10');
+		      var finalDataArr = [];
+		      for(var key in dataArr) {
+		    	  	if(key < 10) {	
+		    	  		var rowArr = [];
+		    	  		var timeArr = dataArr[key].timestamp.split(" ")[1].split(":");
+		    	  		timeArr[0] = Number(timeArr[0].replace(/^0+/, ''));
+		    	  		timeArr[1] = Number(timeArr[1].replace(/^0+/, ''));
+		    	  		timeArr[2] = Number(timeArr[2].replace(/^0+/, ''));
+		    	  		rowArr.push({v:timeArr , f:  dataArr[key].timestamp.split(" ")[1].split(":")[0] +":"+ dataArr[key].timestamp.split(" ")[1].split(":")[1] });
+		    	  		rowArr.push(Number(dataArr[key].pm10));	
+		    	  		finalDataArr.push(rowArr);
+		    	  	}	
+		  	 }
+		      data.addRows(finalDataArr);
+		      var view = new google.visualization.DataView(data);
+		      view.setColumns([0, 1,
+		                       { calc: "stringify",
+		                         sourceColumn: 1,
+		                         type: "string",
+		                         role: "annotation" }]);
+		      var options = {
+		    	hAxis: {
+		          //title: 'Time',
+		          format : 'h:mm'
+		        },
+		        vAxis: {
+		          title: '',
+//		          gridlines: {
+//		              color: 'transparent'
+//		          }
+		        },
+		        bar: {
+		            groupWidth: '96%'
+		        },
+		        legend: {position: 'none'},
+		        colors: ['#76A7FA'],
+		        annotations: {
+		            textStyle: {
+		                color: 'white',
+		                fontSize: 9,
+		            },
+		           // alwaysOutside: true
+		       },
+		       chartArea: {
+		    	   top:10,
+		    	   right:0,
+		    	   left:30,
+		    	   bottom:20
+		       }
+		        
+		      };
+
+		      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_2'));
+//		      google.visualization.events.addListener(chart, 'ready', function () {
+//		    	  console.log('in the event');
+//		    	  document.getElementById('chart_div_2').innerHTML = '<img src="' + chart.getImageURI() + '"/>';
+//		      });
+		      chart.draw(data, options);
+	  }
+
+       function drawTempTrendlines(dataArr) {
+		      var data = new google.visualization.DataTable();
+		      data.addColumn('timeofday', 'Time');
+		      data.addColumn('number', 'Temp.');
+		      var finalDataArr = [];
+		      for(var key in dataArr) {
+		    	  if(key < 10) {
+		    	  		var rowArr = [];
+		    	  		var timeArr = dataArr[key].timestamp.split(" ")[1].split(":");
+		    	  		timeArr[0] = Number(timeArr[0].replace(/^0+/, ''));
+		    	  		timeArr[1] = Number(timeArr[1].replace(/^0+/, ''));
+		    	  		timeArr[2] = Number(timeArr[2].replace(/^0+/, ''));
+		    	  		rowArr.push({v:timeArr , f:  dataArr[key].timestamp.split(" ")[1].split(":")[0] +":"+ dataArr[key].timestamp.split(" ")[1].split(":")[1] });
+		    	  		rowArr.push(Number(dataArr[key].temp));	
+		    	  		finalDataArr.push(rowArr);
+		    	  }	
+		  	 }
+		      data.addRows(finalDataArr);
+		      var view = new google.visualization.DataView(data);
+		      view.setColumns([0, 1,
+		                       { calc: "stringify",
+		                         sourceColumn: 1,
+		                         type: "string",
+		                         role: "annotation" }]);
+		      var options = {
+		    	hAxis: {
+		    	  format : 'h:mm'
+		        },
+		        vAxis: {
+		          title: '',
+//		          gridlines: {
+//		              color: 'transparent'
+//		          }  
+		        },
+		        enableInteractivity : true,
+		        bar: {
+		            groupWidth: '96%'
+		        },
+		        legend: {position: 'none'},
+		        colors: ['#C5A5CF'],
+		        annotations: {
+		            textStyle: {
+		                color: 'white',
+		                fontSize: 9,
+		            },
+		           // alwaysOutside: true
+		       },
+		       chartArea: {
+		    	   top:10,
+		    	   right:0,
+		    	   left:30,
+		    	   bottom:20
+		       }
+		      };
+
+		      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_3'));
+//		      google.visualization.events.addListener(chart, 'ready', function () {
+//		    	  console.log('in the event');
+//		    	  document.getElementById('chart_div_3').innerHTML = '<img src="' + chart.getImageURI() + '"/>';
+//		      });
+		      chart.draw(data, options);
+	  }
+       function drawHumidityTrendlines(dataArr) {
+		      var data = new google.visualization.DataTable();
+		      data.addColumn('timeofday', 'Time');
+		      data.addColumn('number', 'Humidity');
+		      var finalDataArr = [];
+		      for(var key in dataArr) {
+		    	  if(key < 10) {
+		    	  		var rowArr = [];
+		    	  		var timeArr = dataArr[key].timestamp.split(" ")[1].split(":");
+		    	  		timeArr[0] = Number(timeArr[0].replace(/^0+/, ''));
+		    	  		timeArr[1] = Number(timeArr[1].replace(/^0+/, ''));
+		    	  		timeArr[2] = Number(timeArr[2].replace(/^0+/, ''));
+		    	  		rowArr.push({v:timeArr , f:  dataArr[key].timestamp.split(" ")[1].split(":")[0] +":"+ dataArr[key].timestamp.split(" ")[1].split(":")[1] });
+		    	  		rowArr.push(Number(dataArr[key].hum));	
+		    	  		finalDataArr.push(rowArr);
+		    	  }	
+		  	 }
+		      data.addRows(finalDataArr);
+		      var view = new google.visualization.DataView(data);
+		      view.setColumns([0, 1,
+		                       { calc: "stringify",
+		                         sourceColumn: 1,
+		                         type: "string",
+		                         role: "annotation" }]);
+		      var options = {
+		    	hAxis: {
+		    	  format : 'h:mm'
+		        },
+		        vAxis: {
+		          title: '',
+//		          gridlines: {
+//		              color: 'transparent'
+//		          }  
+		        },
+		        enableInteractivity : true,
+		        bar: {
+		            groupWidth: '96%'
+		        },
+		        legend: {position: 'none'},
+		        colors: ['#A5B5FC'],
+		        annotations: {
+		            textStyle: {
+		                color: 'white',
+		                fontSize: 9,
+		            },
+		           // alwaysOutside: true
+		       },
+		       chartArea: {
+		    	   top:10,
+		    	   right:0,
+		    	   left:30,
+		    	   bottom:20
+		       }
+		      };
+
+		      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_4'));
+//		      google.visualization.events.addListener(chart, 'ready', function () {
+//		    	  console.log('in the event');
+//		    	  document.getElementById('chart_div_4').innerHTML = '<img src="' + chart.getImageURI() + '"/>';
+//		      });
+		      chart.draw(data, options);
+	  }
+         
+       function drawo3Trendlines(dataArr) {
+		      var data = new google.visualization.DataTable();
+		      data.addColumn('timeofday', 'Time');
+		      data.addColumn('number', 'Humidity');
+		      var finalDataArr = [];
+		      for(var key in dataArr) {
+		    	  if(key < 10) {
+		    	  		var rowArr = [];
+		    	  		var timeArr = dataArr[key].timestamp.split(" ")[1].split(":");
+		    	  		timeArr[0] = Number(timeArr[0].replace(/^0+/, ''));
+		    	  		timeArr[1] = Number(timeArr[1].replace(/^0+/, ''));
+		    	  		timeArr[2] = Number(timeArr[2].replace(/^0+/, ''));
+		    	  		rowArr.push({v:timeArr , f:  dataArr[key].timestamp.split(" ")[1].split(":")[0] +":"+ dataArr[key].timestamp.split(" ")[1].split(":")[1] });
+		    	  		rowArr.push(Number(dataArr[key].o3));	
+		    	  		finalDataArr.push(rowArr);
+		    	  }	
+		  	 }
+		      data.addRows(finalDataArr);
+		      var view = new google.visualization.DataView(data);
+		      view.setColumns([0, 1,
+		                       { calc: "stringify",
+		                         sourceColumn: 1,
+		                         type: "string",
+		                         role: "annotation" }]);
+		      var options = {
+		    	hAxis: {
+		    	  format : 'h:mm'
+		        },
+		        vAxis: {
+		          title: '',
+//		          gridlines: {
+//		              color: 'transparent'
+//		          }  
+		        },
+		        enableInteractivity : true,
+		        bar: {
+		            groupWidth: '96%'
+		        },
+		        legend: {position: 'none'},
+		        colors: ['#EAB814'],
+		        annotations: {
+		            textStyle: {
+		                color: 'white',
+		                fontSize: 9,
+		            },
+		           // alwaysOutside: true
+		       },
+		       chartArea: {
+		    	   top:10,
+		    	   right:0,
+		    	   left:30,
+		    	   bottom:20
+		       }
+		      };
+
+		      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_5'));
+//		      google.visualization.events.addListener(chart, 'ready', function () {
+//		    	  console.log('in the event');
+//		    	  document.getElementById('chart_div_5').innerHTML = '<img src="' + chart.getImageURI() + '"/>';
+//		      });
+		      chart.draw(data, options);
+	  }
+       function drawCOTrendlines(dataArr) {
+		      var data = new google.visualization.DataTable();
+		      data.addColumn('timeofday', 'Time');
+		      data.addColumn('number', 'CO');
+		      var finalDataArr = [];
+		      for(var key in dataArr) {
+		    	  if(key < 10) {
+		    	  		var rowArr = [];
+		    	  		var timeArr = dataArr[key].timestamp.split(" ")[1].split(":");
+		    	  		timeArr[0] = Number(timeArr[0].replace(/^0+/, ''));
+		    	  		timeArr[1] = Number(timeArr[1].replace(/^0+/, ''));
+		    	  		timeArr[2] = Number(timeArr[2].replace(/^0+/, ''));
+		    	  		rowArr.push({v:timeArr , f:  dataArr[key].timestamp.split(" ")[1].split(":")[0] +":"+ dataArr[key].timestamp.split(" ")[1].split(":")[1] });
+		    	  		rowArr.push(Number(dataArr[key].co));	
+		    	  		finalDataArr.push(rowArr);
+		    	  }	
+		  	 }
+		      data.addRows(finalDataArr);
+		      var view = new google.visualization.DataView(data);
+		      view.setColumns([0, 1,
+		                       { calc: "stringify",
+		                         sourceColumn: 1,
+		                         type: "string",
+		                         role: "annotation" }]);
+		      var options = {
+		    	hAxis: {
+		    	  format : 'h:mm'
+		        },
+		        vAxis: {
+		          title: '',
+//		          gridlines: {
+//		              color: 'transparent'
+//		          }  
+		        },
+		        enableInteractivity : true,
+		        bar: {
+		            groupWidth: '96%'
+		        },
+		        legend: {position: 'none'},
+		        colors: ['#CEF582'],
+		        annotations: {
+		            textStyle: {
+		                color: 'white',
+		                fontSize: 9,
+		            },
+		           // alwaysOutside: true
+		       },
+		       chartArea: {
+		    	   top:10,
+		    	   right:0,
+		    	   left:30,
+		    	   bottom:20
+		       }
+		      };
+
+		      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_6'));
+//		      google.visualization.events.addListener(chart, 'ready', function () {
+//		    	  console.log('in the event');
+//		    	  document.getElementById('chart_div_6').innerHTML = '<img src="' + chart.getImageURI() + '"/>';
+//		      });
+		      chart.draw(data, options);
+	  }
+       function drawSO2Trendlines(dataArr) {
+		      var data = new google.visualization.DataTable();
+		      data.addColumn('timeofday', 'Time');
+		      data.addColumn('number', 'SO2');
+		      var finalDataArr = [];
+		      for(var key in dataArr) {
+		    	  if(key < 10) {
+		    	  		var rowArr = [];
+		    	  		var timeArr = dataArr[key].timestamp.split(" ")[1].split(":");
+		    	  		timeArr[0] = Number(timeArr[0].replace(/^0+/, ''));
+		    	  		timeArr[1] = Number(timeArr[1].replace(/^0+/, ''));
+		    	  		timeArr[2] = Number(timeArr[2].replace(/^0+/, ''));
+		    	  		rowArr.push({v:timeArr , f:  dataArr[key].timestamp.split(" ")[1].split(":")[0] +":"+ dataArr[key].timestamp.split(" ")[1].split(":")[1] });
+		    	  		rowArr.push(Number(dataArr[key].so2));	
+		    	  		finalDataArr.push(rowArr);
+		    	  }	
+		  	 }
+		      data.addRows(finalDataArr);
+		      var view = new google.visualization.DataView(data);
+		      view.setColumns([0, 1,
+		                       { calc: "stringify",
+		                         sourceColumn: 1,
+		                         type: "string",
+		                         role: "annotation" }]);
+		      var options = {
+		    	hAxis: {
+		    	  format : 'h:mm'
+		        },
+		        vAxis: {
+		          title: '',
+//		          gridlines: {
+//		              color: 'transparent'
+//		          }  
+		        },
+		        enableInteractivity : true,
+		        bar: {
+		            groupWidth: '96%'
+		        },
+		        legend: {position: 'none'},
+		        colors: ['#7BEEB9'],
+		        annotations: {
+		            textStyle: {
+		                color: 'white',
+		                fontSize: 9,
+		            },
+		           // alwaysOutside: true
+		       },
+		       chartArea: {
+		    	   top:10,
+		    	   right:0,
+		    	   left:30,
+		    	   bottom:20
+		       }
+		      };
+
+		      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_7'));
+//		      google.visualization.events.addListener(chart, 'ready', function () {
+//		    	  console.log('in the event');
+//		    	  document.getElementById('chart_div_7').innerHTML = '<img src="' + chart.getImageURI() + '"/>';
+//		      });
+		      chart.draw(data, options);
+	  }
+       
+       function drawNOTrendlines(dataArr) {
+		      var data = new google.visualization.DataTable();
+		      data.addColumn('timeofday', 'Time');
+		      data.addColumn('number', 'NO');
+		      var finalDataArr = [];
+		      for(var key in dataArr) {
+		    	  if(key < 10) {
+		    	  		var rowArr = [];
+		    	  		var timeArr = dataArr[key].timestamp.split(" ")[1].split(":");
+		    	  		timeArr[0] = Number(timeArr[0].replace(/^0+/, ''));
+		    	  		timeArr[1] = Number(timeArr[1].replace(/^0+/, ''));
+		    	  		timeArr[2] = Number(timeArr[2].replace(/^0+/, ''));
+		    	  		rowArr.push({v:timeArr , f:  dataArr[key].timestamp.split(" ")[1].split(":")[0] +":"+ dataArr[key].timestamp.split(" ")[1].split(":")[1] });
+		    	  		rowArr.push(Number(dataArr[key].no2));	
+		    	  		finalDataArr.push(rowArr);
+		    	  }	
+		  	 }
+		      data.addRows(finalDataArr);
+		      var view = new google.visualization.DataView(data);
+		      view.setColumns([0, 1,
+		                       { calc: "stringify",
+		                         sourceColumn: 1,
+		                         type: "string",
+		                         role: "annotation" }]);
+		      var options = {
+		    	hAxis: {
+		    	  format : 'h:mm'
+		        },
+		        vAxis: {
+		          title: '',
+//		          gridlines: {
+//		              color: 'transparent'
+//		          }  
+		        },
+		        enableInteractivity : true,
+		        bar: {
+		            groupWidth: '96%'
+		        },
+		        legend: {position: 'none'},
+		        colors: ['#F2BAC2'],
+		        annotations: {
+		            textStyle: {
+		                color: 'white',
+		                fontSize: 9,
+		            },
+		           // alwaysOutside: true
+		       },
+		       chartArea: {
+		    	   top:10,
+		    	   right:0,
+		    	   left:30,
+		    	   bottom:20
+		       }
+		      };
+
+		      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_8'));
+//		      google.visualization.events.addListener(chart, 'ready', function () {
+//		    	  console.log('in the event');
+//		    	  document.getElementById('chart_div_8').innerHTML = '<img src="' + chart.getImageURI() + '"/>';
+//		      });
+		      chart.draw(data, options);
+	  }
+
+       
+      
+       
+        function generatePM2Chart(responseArr) {
+        	 var apiResponse =  responseArr[0];
+        	 var dataArr = responseArr[1];
+        								console.log('the value of data arr ',dataArr);
+					    	   		  	var pm2valuesarr = [];
+					    	   		    pm2valuesarr.push('data1')
+					    	   		  	var timevaluesarr = [];
+					    	   		    timevaluesarr.push('x1');
+					    	   		  	for(var key in dataArr) {
+					    	   		  			if(key < 11) {
+					    	   		  				console.log(Number(dataArr[key].pm2));
+					    	   		  				pm2valuesarr.push(Number(dataArr[key].pm2));	
+					    	   		  			    //timevaluesarr.push(dataArr[key].timestamp.split(" ")[1]);
+					    	   		  				//var datepart = dataArr[key].timestamp.split(" ")[0];
+					    	   		  				//var timepart = dataArr[key].timestamp.split(" ")[1];
+					    	   		  				var date = new Date(dataArr[key].timestamp);
+					    	   		  				date.setMinutes(date.getMinutes() + 30);
+					    	   		  				date.setHours(date.getHours() + 5 );
+						    	   		  			//date.setMinutes(0);
+						    	   		  			//date.setSeconds(0);
+					    	   		  				timevaluesarr.push(date.toISOString()); // ISO string is utc time so please add offset to make it correct GMT time according to your zone..
+					    	   		  			}  
+					    	   		  	}
+					    	   		  	var delhipm2valuesarr = [];
+					    	   		    delhipm2valuesarr.push('data2')
+					    	   		  	var delhitimevaluesarr = [];
+					    	   		    delhitimevaluesarr.push('x2');
+					    	   		  	var apiResultsArr = apiResponse.results;
+					    	   		  	var count = 0;
+					    	   		  	for(var key in apiResultsArr) {
+					    	   		  					
+					    	   		  					if(apiResultsArr[key].value != -999  && count <= 15) {
+					    	   		  						 count++;
+					    	   		  						 delhipm2valuesarr.push(apiResultsArr[key].value);
+					    	   		  					     var date = new Date(apiResultsArr[key].date.local);
+						    	   		  					date.setMinutes(date.getMinutes() + 30);
+							    	   		  				date.setHours(date.getHours() + 5 );
+					    	   		  					     //date.setMinutes(0,0);
+					    	   		  						 delhitimevaluesarr.push(date.toISOString());
+					    	   		  					}     
+					    	   		  	}
+					    	   		  
+					    	   		  	console.log('timevaluesarr',timevaluesarr);
+					    	   		  	console.log('delhitimevaluesarr',delhitimevaluesarr);
+					    	   		    console.log('pm2valuesarr',pm2valuesarr);
+					    	   	    	console.log('delhipm2valuesarr',delhipm2valuesarr);
+					    	   		 
+					    	   		  	
+					                  require(['c3', 'jquery'], function(c3, $) {
+					                  		
+					                	  var chart = c3.generate({
+					                  			bindto: '#chart-employment', // id of chart wrapper
+					                  			data: {
+					                			   xFormat: '%Y-%m-%dT%H:%M:%S.%LZ',
+					                		  		xs : {
+					                		  					'data1' : 'x1',
+					                		  					'data2' : 'x2'
+					                	  			},
+					                		  		//x: 'x',
+					                	  		
+					                	  			columns: [
+					                  				    // each columns data
+					                  				    timevaluesarr,
+					                  				     pm2valuesarr,
+														//,
+					                  					//['data3', 252, 358, 246, 277, 314]
+					                  					
+					                  					
+					                  				],
+					                  				type: 'line', // default type of chart
+					                  				colors: {
+					                  					'data1': tabler.colors["green"],
+					                  					'data2': tabler.colors["blue"]//,
+					                  					//'data3': tabler.colors["orange"]
+					                  				},
+					                  				names: {
+					                  				    // name of each serie
+					                  					'data1': 'Central Park PM2.5 Value',
+					                  					'data2': 'Delhi PM2.5 Value'//,
+					                  					//'data3': 'Gurgaon  PM2.5 Value'
+					                  				}
+					                  			},
+					                  			axis: {
+					                  				x: {
+					                  					type : 'timeseries',
+					                  					//localtime: true,
+					                  					
+					                  					tick : {
+					                  		                rotate: 75,
+					                  		                //multiline: false
+					                  		                format: '%Y-%m-%d %H:%M:%S' 
+					                  		            }
+					                  					// name of each category
+					                  					//categories: ['17/6/18', '18/6/18', '19/6/18', '20/6/18', '21/6/18' , '22/6/18']
+					                  					//categories: delhitimevaluesarr
+					                  				},
+					                  			},
+					                  			legend: {
+					                                  show: false, //hide legend
+					                  			},
+					                  			padding: {
+					                  				bottom: 0,
+					                  				top: 0
+					                  			},
+					                  		});
+					                	   setTimeout(function () {
+						                	    chart.load({
+						                	        columns: [
+						                	                  delhitimevaluesarr,
+						                	                  delhipm2valuesarr
+						                	        ]
+						                	    });
+						                	}, 1000);
+					                  });
+					                 
+
+					       }  
+                </script>
+              </div>
+              <!--end ist-->
+              <!--ist-->
+              <div class="col-lg-6 col-xl-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">PM10</h3>
+<table align="right" width="100%"> 
+                    
+                    <tr align="right">
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td bgcolor="green" class="legend" >Central Park	</td>
+                    <td bgcolor="orange"  class="legend">Gurgaon	</td>
+                    <td bgcolor="blue" class="legend" >Delhi	</td>
+                    </tr>
+                    </table>
+                  </div><br>
+
+                  <!--for  filter-->
+           <!--
+                  <div class="form-group">
+                     
+                        <div class="selectgroup w-100">
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="50" class="selectgroup-input" checked="">
+                            <span class="selectgroup-button">1 day</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="100" class="selectgroup-input">
+                            <span class="selectgroup-button">5 day</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="150" class="selectgroup-input">
+                            <span class="selectgroup-button">7 day</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="200" class="selectgroup-input">
+                            <span class="selectgroup-button">1 month</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="200" class="selectgroup-input">
+                            <span class="selectgroup-button">1 year</span>
+                          </label>
+                        </div>
+                        </div>
+                        -->
+                 <!--end filter-->
+                  <div class="card-body">
+                    <div id="chart-employment2" style="height: 16rem"></div>
+                  </div>
+                </div>
+                <script>
+                
+                function generatePM10Chart(dataArr) {
+                	var pm10valuesarr = [];
+    	   		    pm10valuesarr.push('data1')
+    	   		  	var timevaluesarr = [];
+    	   		  	for(var key in dataArr) {
+    	   		  			if(key < 5 ) {	
+    	   		  				pm10valuesarr.push(Number(dataArr[key].pm10));	
+    	   		  			    timevaluesarr.push(dataArr[key].timestamp.split(" ")[1]);
+    	   		  			}  
+    	   		  	}
+                  require(['c3', 'jquery'], function(c3, $) {
+                  	
+                  		var chart = c3.generate({
+                  			bindto: '#chart-employment2', // id of chart wrapper
+                  			data: {
+                  				columns: [
+                  				    // each columns data
+									pm10valuesarr,
+									['data2', 345, 245, 445, 345, 349],
+                  					['data3', 223,242, 196, 156, 167]
+                  					
+                  					
+                  				],
+                  				type: 'line', // default type of chart
+                  				colors: {
+                  					'data1': tabler.colors["green"],
+                  					'data2': tabler.colors["blue"],
+                  					'data3': tabler.colors["orange"]
+                  				},
+                  				names: {
+                  				    // name of each serie
+                  					'data1': 'Central Park PM10 Value',
+                  					'data2': 'Delhi PM10 Value',
+                  					'data3': 'Gurgaon  PM10 Value'
+                  				}
+                  			},
+                  			axis: {
+                  				x: {
+                  					type: 'category',
+                  					// name of each category
+                  					//categories: ['17/6/18', '18/6/18', '19/6/18', '20/6/18', '21/6/18' , '22/6/18']
+                  					categories:timevaluesarr
+                  				},
+                  			},
+                  			legend: {
+                                  show: false, //hide legend
+                  			},
+                  			padding: {
+                  				bottom: 0,
+                  				top: 0
+                  			},
+                  		});
+                  	
+                  });
+                }
+                </script>
+              </div>
+              <!--end ist-->
+              <!--iind-->
+              <div class="col-lg-6 col-xl-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Temp.</h3>
+<table align="right" width="100%"> 
+                    
+                    <tr align="right">
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td bgcolor="green" class="legend" >Central Park	</td>
+                    <td bgcolor="orange"  class="legend">Gurgaon	</td>
+                    <td bgcolor="blue" class="legend" >Delhi	</td>
+                    </tr>
+                    </table>
+                  </div><br>
+<!--for  filter-->
+<!--
+
+                 <div class="form-group">
+                     
+                        <div class="selectgroup w-100">
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="50" class="selectgroup-input" checked="">
+                            <span class="selectgroup-button">1 day</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="100" class="selectgroup-input">
+                            <span class="selectgroup-button">5 day</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="150" class="selectgroup-input">
+                            <span class="selectgroup-button">7 day</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="200" class="selectgroup-input">
+                            <span class="selectgroup-button">1 month</span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="value" value="200" class="selectgroup-input">
+                            <span class="selectgroup-button">1 year</span>
+                          </label>
+                        </div>
+                        </div>
+                        
+                        -->
+                 <!--end filter-->
+                  <div class="card-body">
+                    <div id="chart-employment1" style="height: 16rem"></div>
+                  </div>
+                </div>
+                <script>
+			                function generateTempChart(dataArr) {
+			                  require(['c3', 'jquery'], function(c3, $) {
+			                	    var tempvaluesarr = [];
+			                	    tempvaluesarr.push('data1')
+				      	   		  	var timevaluesarr = [];
+				      	   		  	for(var key in dataArr) {
+				      	   		  			if(key < 5 ) {	
+				      	   		  				tempvaluesarr.push(Number(dataArr[key].temp));	
+				      	   		  			    timevaluesarr.push(dataArr[key].timestamp.split(" ")[1]);
+				      	   		  			}   
+				      	   		  	}
+			                  		var chart = c3.generate({
+			                  			bindto: '#chart-employment1', // id of chart wrapper
+			                  			data: {
+			                  				columns: [
+			                  				    // each columns data
+												tempvaluesarr,
+												['data2', 45, 43, 44, 46, 43],
+			                  					['data3', 45, 44,43, 45, 42]
+			                  					
+			                  					
+			                  				],
+			                  				type: 'line', // default type of chart
+			                  				colors: {
+			                  					'data1': tabler.colors["green"],
+			                  					'data2': tabler.colors["blue"],
+			                  					'data3': tabler.colors["orange"]
+			                  				},
+			                  				names: {
+			                  				    // name of each serie
+			                  					'data1': 'Central Park Temp Value',
+			                  					'data2': 'Delhi PM2.5 Temp Value',
+			                  					'data3': 'Gurgaon  Temp Value'
+			                  				}
+			                  			},
+			                  			axis: {
+			                  				x: {
+			                  					type: 'category',
+			                  					// name of each category
+			                  					categories: timevaluesarr
+			                  				},
+			                  			},
+			                  			legend: {
+			                                  show: false, //hide legend
+			                  			},
+			                  			padding: {
+			                  				bottom: 0,
+			                  				top: 0
+			                  			},
+			                  		});
+			                  	
+			                  });
+			                }
+                </script>
+              </div>
+              <!--end iind-->
+             
+               
+               
+               
+          </div>
+          
+        </div>
+      </div>
+      <!--after nav end-->
+    <!--page end div-->
+    </div>
+    </div>
+    
+  </body>
+</html>
