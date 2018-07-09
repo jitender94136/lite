@@ -1,8 +1,7 @@
-package com.journaldev.spring.delegate;
+package in.flexsol.delegate;
 
 import java.util.List;
-
-import com.journaldev.spring.modal.Record;
+import in.flexsol.modal.Record;
 
 public interface RecordService {
 

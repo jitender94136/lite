@@ -1,6 +1,9 @@
-package com.journaldev.spring.controller;
+package in.flexsol.web.controller;
 
 
+
+import in.flexsol.delegate.RecordService;
+import in.flexsol.modal.Record;
 
 import java.util.List;
 
@@ -13,9 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.journaldev.spring.delegate.RecordService;
-import com.journaldev.spring.modal.Record;
 
 /**
  * Handles requests for the application file upload requests

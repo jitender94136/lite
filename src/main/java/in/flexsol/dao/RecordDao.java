@@ -1,10 +1,7 @@
-package com.journaldev.spring.dao;
+package in.flexsol.dao;
 
 import java.util.List;
-
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-
-import com.journaldev.spring.modal.Record;
+import in.flexsol.modal.Record;
 
 public interface RecordDao {
 			
@@ -15,12 +12,7 @@ public interface RecordDao {
 
 	public List<Record> getCurrentDayRecords();
 	
-	
-	
-
-	public List<Record> getWeeklyRecords();
-	
-	
+	public List<Record> getWeeklyRecords();	
 	
 	public List<Record> getMonthlyRecords();
 	

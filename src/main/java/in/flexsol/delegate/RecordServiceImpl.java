@@ -1,12 +1,13 @@
-package com.journaldev.spring.delegate;
+package in.flexsol.delegate;
+
+import in.flexsol.dao.RecordDao;
+import in.flexsol.modal.Record;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.journaldev.spring.dao.RecordDao;
-import com.journaldev.spring.modal.Record;
 
 
 @Service

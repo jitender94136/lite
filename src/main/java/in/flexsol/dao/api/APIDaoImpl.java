@@ -1,11 +1,11 @@
-package com.journaldev.spring.dao.api;
+package in.flexsol.dao.api;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.journaldev.spring.modal.gurgaon.GurgaonAirFeed;
+import in.flexsol.modal.gurgaon.GurgaonAirFeed;
 
 
 public class APIDaoImpl implements APIDao {

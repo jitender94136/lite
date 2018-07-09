@@ -1,4 +1,4 @@
-package com.journaldev.spring.modal;
+package in.flexsol.modal;
 
 import java.io.Serializable;
 

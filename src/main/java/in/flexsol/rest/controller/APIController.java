@@ -1,4 +1,4 @@
-package com.journaldev.spring.controller;
+package in.flexsol.rest.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.journaldev.spring.delegate.api.APIService;
-import com.journaldev.spring.modal.gurgaon.GurgaonAirFeed;
+import in.flexsol.delegate.api.APIService;
+import in.flexsol.modal.gurgaon.GurgaonAirFeed;
 
 
 

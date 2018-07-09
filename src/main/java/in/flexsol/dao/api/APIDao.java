@@ -1,6 +1,6 @@
-package com.journaldev.spring.dao.api;
+package in.flexsol.dao.api;
 
-import com.journaldev.spring.modal.gurgaon.GurgaonAirFeed;
+import in.flexsol.modal.gurgaon.GurgaonAirFeed;
 
 public interface APIDao {
 

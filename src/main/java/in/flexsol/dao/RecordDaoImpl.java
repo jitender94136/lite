@@ -1,25 +1,17 @@
-package com.journaldev.spring.dao;
+package in.flexsol.dao;
 
-import java.sql.CallableStatement;
+import in.flexsol.modal.Record;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.LinkedCaseInsensitiveMap;
-
-import com.journaldev.spring.modal.Record;
 
 
 @Repository

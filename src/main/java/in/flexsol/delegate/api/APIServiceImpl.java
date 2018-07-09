@@ -1,10 +1,9 @@
-package com.journaldev.spring.delegate.api;
+package in.flexsol.delegate.api;
+
+import in.flexsol.dao.api.APIDao;
+import in.flexsol.modal.gurgaon.GurgaonAirFeed;
 
 import org.springframework.stereotype.Service;
-
-import com.journaldev.spring.dao.api.APIDao;
-import com.journaldev.spring.modal.gurgaon.GurgaonAirFeed;
-
 
 @Service
 public class APIServiceImpl implements APIService {

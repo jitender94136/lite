@@ -1,6 +1,6 @@
-package com.journaldev.spring.delegate.api;
+package in.flexsol.delegate.api;
 
-import com.journaldev.spring.modal.gurgaon.GurgaonAirFeed;
+import in.flexsol.modal.gurgaon.GurgaonAirFeed;
 
 public interface APIService {
 

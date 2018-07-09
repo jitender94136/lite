@@ -1,5 +1,5 @@
 
-package com.journaldev.spring.modal.gurgaon;
+package in.flexsol.modal.gurgaon;
 
 import java.util.List;
 
