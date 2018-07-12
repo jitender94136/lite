@@ -1,21 +1,20 @@
 package in.flexsol.dao.api;
 
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import in.flexsol.modal.gurgaon.GurgaonAirFeed;
 
 
 public class APIDaoImpl implements APIDao {
 
-	 private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 		
-	    @Autowired
-	    public void setDataSource(DataSource dataSource) {
-	        this.jdbcTemplate = new JdbcTemplate(dataSource);
-	    }
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
 	
 	
 	

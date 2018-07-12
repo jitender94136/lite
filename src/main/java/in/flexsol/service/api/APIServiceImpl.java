@@ -1,4 +1,4 @@
-package in.flexsol.delegate.api;
+package in.flexsol.service.api;
 
 import in.flexsol.dao.api.APIDao;
 import in.flexsol.modal.gurgaon.GurgaonAirFeed;

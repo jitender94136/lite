@@ -1,4 +1,4 @@
-package in.flexsol.delegate;
+package in.flexsol.service;
 
 import java.util.List;
 import in.flexsol.modal.Record;

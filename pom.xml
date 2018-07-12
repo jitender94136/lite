@@ -163,10 +163,12 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-	
-	   <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
-		
-      
+		<dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+	  		<version>0.3m</version>
+        </dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
 	
 		<!-- Test -->
 		<dependency>
@@ -197,8 +199,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>

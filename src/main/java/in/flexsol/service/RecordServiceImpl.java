@@ -1,4 +1,4 @@
-package in.flexsol.delegate;
+package in.flexsol.service;
 
 import in.flexsol.dao.RecordDao;
 import in.flexsol.modal.Record;

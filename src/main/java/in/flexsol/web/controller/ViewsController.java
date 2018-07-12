@@ -2,8 +2,8 @@ package in.flexsol.web.controller;
 
 
 
-import in.flexsol.delegate.RecordService;
 import in.flexsol.modal.Record;
+import in.flexsol.service.RecordService;
 
 import java.util.List;
 

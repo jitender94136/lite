@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	 xmlns:tx="http://www.springframework.org/schema/tx"
+	 xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
@@ -12,7 +13,7 @@
 		infrastructure -->
 
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
+	<mvc:annotation-driven />
 	<context:annotation-config/>
 	
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
@@ -44,6 +45,11 @@
 	
 	<context:component-scan base-package="in.flexsol.web" />
 
-
+	<mvc:interceptors>
+					<mvc:interceptor>
+						<mvc:mapping path="/**" />
+						<beans:bean class="in.flexsol.interceptors.RequestInterceptor"></beans:bean>
+					</mvc:interceptor>
+    </mvc:interceptors>
 
 </beans:beans>
