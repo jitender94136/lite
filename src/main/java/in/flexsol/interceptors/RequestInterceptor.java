@@ -1,11 +1,14 @@
 package in.flexsol.interceptors;
 
+import in.flexsol.modal.user.User;
+import in.flexsol.utility.Constants;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -17,17 +20,23 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 		long startTime = System.currentTimeMillis();
-		logger.info("Request URL::" + request.getRequestURL().toString()
+		logger.error("Request URL::" + request.getRequestURL().toString()
 				+ ":: Start Time=" + System.currentTimeMillis());
 		request.setAttribute("startTime", startTime);
-		//if returned false, we need to make sure 'response' is sent
-		if(isXMLHttpRequest(request)) {
-			  response.sendError(403);
-			  return false;
-		} else {
-			  request.getSession().invalidate();
-			  response.sendRedirect("/");
+		HttpSession session = request.getSession();
+		User user = (User)request.getSession().getAttribute(Constants.USER);
+		if(user == null && isXMLHttpRequest(request)) {
+			response.sendError(403);
+			return false;
+		} else if(user == null) {
+			session.invalidate();
+			response.sendRedirect("/filite/");
+			return false;
 		}
+//		if(isXMLHttpRequest(request)) {
+//			  response.sendError(403);
+//			  return false;
+//		}
 		return true;
 	}
 
@@ -35,7 +44,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		System.out.println("Request URL::" + request.getRequestURL().toString()
+		logger.error("Request URL::" + request.getRequestURL().toString()
 				+ " Sent to Handler :: Current Time=" + System.currentTimeMillis());
 		//we can add attributes in the modelAndView and use that in the view page
 	}
@@ -45,14 +54,13 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		long startTime = (Long) request.getAttribute("startTime");
-		logger.info("Request URL::" + request.getRequestURL().toString()
+		logger.error("Request URL::" + request.getRequestURL().toString()
 				+ ":: End Time=" + System.currentTimeMillis());
-		logger.info("Request URL::" + request.getRequestURL().toString()
+		logger.error("Request URL::" + request.getRequestURL().toString()
 				+ ":: Time Taken=" + (System.currentTimeMillis() - startTime));
 	}
 	
-	private boolean isXMLHttpRequest(HttpServletRequest request)
-	{
+	private boolean isXMLHttpRequest(HttpServletRequest request) {
 	  return request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with").equals("XMLHttpRequest");
 	}
 	

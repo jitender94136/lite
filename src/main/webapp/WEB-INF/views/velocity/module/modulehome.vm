@@ -1,0 +1,58 @@
+#set($pagetitle="$!module.moduleName")
+
+#parse("/WEB-INF/views/velocity/header.vm")
+
+<div class="container">
+	<div class="row well">
+		 <div class="col-md-2">
+    	    <ul class="nav nav-pills nav-stacked well">
+		              #foreach($!s in $!menusList)
+		              		<li ><a  style="cursor:pointer"  onclick="loadMenuData('$!s.menuHref')" > <i class="$!s.menuIcon"></i> $!s.menuName </a></li>
+		              #end	
+		    </ul>
+         </div>
+         <div class="col-md-10" id="wincontainer">
+         			
+							  This is the module home page.
+							  Module Name is :- <h1> $!module.moduleName  </h1>
+		 </div>
+	</div>
+</div>
+
+
+<script type="text/javascript" >
+			
+		function loadMenuData(url) {
+						console.log(contextUrl+url);
+						$.ajax({
+									type : 'POST',
+									url : contextUrl+url,
+									success : function(data) {
+											console.log(data);
+											if(data == -1) {
+												alert('Unable  to process your reqeust. Please try again...');
+											} else {	
+												$("#wincontainer").html(data);
+											}	
+									},
+									error : function(jqXHR,status,error) {
+												if(jqXHR.status == 403) {
+													alert('Your session has expired. Please login again...');
+													setTimeout(function() {
+															window.location.href=contextUrl;		
+													},1000);
+												} else {
+													alert('Unable to process your request.Please try again...');
+												}
+												console.log(error);
+												console.log(status);
+									}
+						});		
+						
+		}			
+
+</script>
+
+#parse("/WEB-INF/views/velocity/footer.vm")
+
+

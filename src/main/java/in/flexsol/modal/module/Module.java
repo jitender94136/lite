@@ -3,20 +3,26 @@ package in.flexsol.modal.module;
 public class Module {
 
 			int id;
-			String module;
+			String moduleName;
+			String modulePic;
 			int active;
-			int moduleType;
 			public int getId() {
 				return id;
+			}
+			public String getModulePic() {
+				return modulePic;
+			}
+			public void setModulePic(String modulePic) {
+				this.modulePic = modulePic;
 			}
 			public void setId(int id) {
 				this.id = id;
 			}
-			public String getModule() {
-				return module;
+			public String getModuleName() {
+				return moduleName;
 			}
-			public void setModule(String module) {
-				this.module = module;
+			public void setModuleName(String module) {
+				this.moduleName = module;
 			}
 			public int getActive() {
 				return active;
@@ -24,11 +30,4 @@ public class Module {
 			public void setActive(int active) {
 				this.active = active;
 			}
-			public int getModuleType() {
-				return moduleType;
-			}
-			public void setModuleType(int moduleType) {
-				this.moduleType = moduleType;
-			}
-	
 }

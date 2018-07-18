@@ -1,0 +1,136 @@
+
+
+<div id="addusermodal" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+		    	    <div class="modal-content">
+							      <div id="addusermodalbody"  class="modal-body">
+										<form  id="adduserform"  action="#">
+												  	<div class="form-group">
+														    <label for="firstname">First Name:</label>
+														    <input type="text" class="form-control" id="firstname" placeholder="Enter First Name" name="firstName"  />
+												    </div>
+												    <div class="form-group">
+														    <label for="lastname">Last Name:</label>
+														    <input type="text" class="form-control" id="lastname" placeholder="Enter Last Name" name="lastName"  />
+												    </div>
+													<div class="form-group">
+														      <label for="email">Email:</label>
+														      <input type="email" class="form-control" id="email" placeholder="Enter email" name="emailId"  />  
+												    </div>
+												    <div class="form-group">
+														      <label for="dob"> DOB:</label>
+														      <input type="text" class="form-control" id="dob" placeholder="Enter dob" name="dob"  />
+												    </div>
+												    <div class="form-group">
+												      <label for="usertype">User Type:</label>
+												      <select class="form-control" id="usertype" placeholder="--Select--" name="userType"  >
+																      <option value="1"  > Administrator </option>			
+																      <option value="2"  > User </option>
+													  </select>
+												    </div>
+												    <button type="submit" class="btn btn-default">Submit</button>
+										  </form>
+							      </div>
+							      <div class="modal-footer">
+							      		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							      </div>
+				    </div>
+		  </div>
+</div>
+
+
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addusermodal">Add User</button>
+
+
+
+<table  class="table table-bordered">
+				<thead>
+							<th> First Name  </th>
+							<th> Last Name </th>
+							<th> Email Id </th>
+							<th> User Type </th>
+							<th> Status </th>
+							<th> Actions </th>
+				</thead>
+		
+				<tbody>
+				   #foreach($s in $!usersList)
+						<tr>
+							  <td> $!s.firstName </td>
+							  <td> $!s.lastName </td>
+							  <td> $!s.emailId </td>
+							  <td> $!s.userType </td>
+							  <td> #if($!s.active ==  1) Active #else  Inactive #end </td>
+							  <td> <i class="glyphicon glyphicon-edit" alt="Edit Role" onclick="editUserScreen($!s.userId)" > </i>  </td>
+						</tr>	
+					#end	
+				</tbody>
+
+
+</table>
+
+
+<script type="text/javascript">
+			function editUserScreen(userId) {
+					$("#mymodal").modal("show");
+					$.ajax({
+								type : 'POST',
+								url : contextUrl+"modules/ums/getEditUserScreen/"+userId,
+								success : function(data) {
+									console.log(data);
+									$("#mymodal").modal("hide");
+									if(data == -1) {
+										alert('Unable to process your reqeust...');
+									} else {
+										$("#modalbody").html(data);
+									}	
+								},
+								error : function(jqXHR,status,error) {
+											$("#mymodal").modal("hide");
+											if(jqXHR.status == 403) {
+												alert('Your session has expired. Please login again...');
+												sessionTimeout(function() {
+														window.location.href=contextUrl;		
+												},1000);
+											} else {
+												alert('Unable to process your request.Please try again...');
+											}
+											console.log(error);
+											console.log(status);
+								}
+					});
+			}
+			
+			$("#adduserform").submit(function(event) {
+					event.preventDefault();
+					var formData = $("#adduserform").serialize();
+					$.ajax({
+								type : 'POST',
+								url : contextUrl+'modules/ums/addUser',
+								data : formData,
+								success : function(data) {
+											if(data > 0) {
+													$("#mymodal").modal("hide");
+													alert('User Added Successfully...');
+											} else if(data == 0) {
+													alert('User with this email id already exists...');
+											} else if(data == -1) {
+													alert('Unable to process your reqeust.Please try again...');
+											}
+								},
+								error : function(jqXHR, status, error) {
+									if(jqXHR.status == 403) {
+										alert('Your session has expired. Please login again...');
+										sessionTimeout(function() {
+												window.location.href=contextUrl;		
+										},1000);
+									} else {
+										alert('Unable to process your request.Please try again...');
+									}
+									console.log(error);
+									console.log(status);
+								}
+					});	
+			});
+</script>

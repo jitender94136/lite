@@ -1,22 +1,29 @@
 package in.flexsol.modal.menu;
 
 public class Menu {
-			int menuId;
+			int id;
 			String menuName;
 			String menuHref;
+			String menuIcon;
 			int active;
 			int moduleType;
+			public String getMenuIcon() {
+				return menuIcon;
+			}
+			public void setMenuIcon(String menuIcon) {
+				this.menuIcon = menuIcon;
+			}
 			public int getModuleType() {
 				return moduleType;
 			}
 			public void setModuleType(int moduleType) {
 				this.moduleType = moduleType;
 			}
-			public int getMenuId() {
-				return menuId;
+			public int getId() {
+				return id;
 			}
-			public void setMenuId(int menuId) {
-				this.menuId = menuId;
+			public void setId(int id) {
+				this.id = id;
 			}
 			public String getMenuName() {
 				return menuName;
@@ -36,6 +43,4 @@ public class Menu {
 			public void setActive(int active) {
 				this.active = active;
 			}
-			
-			
 }

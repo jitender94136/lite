@@ -1,0 +1,12 @@
+#if($!status == -1)
+		Not able to process your request....
+#elseif($!status == 0) 
+		User Not found please register again.....
+#elseif($!status == 1) 
+		User Verified successfully. Please login
+		<a href="/filite/"> Login </a>....
+#end
+	
+	
+	
+	

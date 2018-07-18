@@ -168,6 +168,11 @@
             <artifactId>jbcrypt</artifactId>
 	  		<version>0.3m</version>
         </dependency>
+        <dependency>	
+        		 <groupId>com.sendgrid</groupId> 
+        		 <artifactId>sendgrid-java</artifactId> 
+        		 <version>4.2.0</version> 
+        </dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
 	
 		<!-- Test -->

@@ -1,0 +1,18 @@
+#set($!pagetitle="Modules")
+
+#parse("/WEB-INF/views/velocity/header.vm")
+
+#if($!status == -2)
+	 Please contact your system administrator for module assignment...
+#elseif($!status == -1)
+	 you are not authorized to access this module. Please find below the list of authorized module...
+#elseif($!status == 0) 
+	Unable to process your request.Please try after some time....
+#else
+	 List of available modules:- <br/>
+#end
+#foreach($!s in $moduleList) 
+		<a href="modules/$!s.id" >	$!s.moduleName  </a>  <br/>
+#end
+
+#parse("/WEB-INF/views/velocity/footer.vm")

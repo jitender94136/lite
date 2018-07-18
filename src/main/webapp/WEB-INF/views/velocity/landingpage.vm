@@ -4525,13 +4525,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                                     <label for="password" class="youpasswd"> Your password </label>
                                     <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" /> 
                                 </p>
+                                <p> <button type="submit" style="text-align:right"> submit </button> </p>
                             <!--  <p class="keeplogin"> 
 									<input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" /> 
 									<label for="loginkeeping">Keep me logged in</label>
 								</p>  -->
-                                <p class="login button"> 
-                                   <a href="http://cookingfoodsworld.blogspot.in/" target="_blank" ></a>
+                                <p class="login button"  style="text-align:center;color:red"> 
+                                	#if($!status == -1)
+                                				Unable to process your request...
+                                	#elseif($!status == 0 || $!status == 2) 
+                                				 Email-Id or Password is not valid...
+                                	#end	
+                                     <!-- <a href="http://cookingfoodsworld.blogspot.in/" target="_blank" ></a> -->
 								</p>
+								
                                 <p class="change_link">
 									Not a member yet ?
 									<a href="#toregister" class="to_register">Join us</a>
@@ -4583,24 +4590,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </body>
 </html>
 
-#parse("/WEB-INF/views/velocity/jsdata.vm")
+#parse("/WEB-INF/views/velocity/contextdata.vm")
 
 <script type="text/javascript">
-$(document).ready(function() {
-				console.log('before the ajax request.....');
-				$.ajax({
-				    type: 'post',
-				    url: contextUrl+'register',
-				    success : function(data) {
-								console.log(data);
-				    },
-				    error: function (jqXHR, status, error) {
-				            console.log(jqXHR);
-				            console.log(status);
-				            console.log(error);
-				    }
-				});
-});
+		$(document).ready(function() {
+						console.log('before the ajax request.....');
+						$.ajax({
+							    type: 'post',
+							    url: contextUrl+'register',
+							    success: function(data) {
+											console.log(data);
+							    },
+							    error: function (jqXHR, status, error) {
+							            console.log(jqXHR.status);
+							            console.log(status);
+							            console.log(error);
+							    }
+						});
+		});
 </script>
 </body>
 </html>

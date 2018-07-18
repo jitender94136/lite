@@ -1,3 +1,15 @@
 
 
-you are successfully logged in.....
+#if($!status == -1)
+
+  Not able to process your request....
+	
+#elseif($!status == 0) 
+
+email id already registered....<span> try </span> with different email id...
+
+#elseif($!status > 0)
+
+Please verify your email id within 15 minutes....
+
+#end

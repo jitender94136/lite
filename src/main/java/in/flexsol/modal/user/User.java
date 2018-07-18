@@ -11,6 +11,13 @@ public class User {
 	String dob;
 	int userType;
 	int active;
+	int createdBy;
+	public int getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(int createdBy) {
+		this.createdBy = createdBy;
+	}
 	public int getId() {
 		return id;
 	}
@@ -65,6 +72,4 @@ public class User {
 	public void setUserType(int userType) {
 		this.userType = userType;
 	}
-	
-
 }

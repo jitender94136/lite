@@ -1,0 +1,68 @@
+	<form  id="edituserform"  action="#">
+		    
+			<div class="form-group">
+				    <label for="firstname">First Name:</label>
+				    <input type="text" class="form-control" id="firstname" placeholder="Enter First Name" name="firstName" value="$!user.firstName" />
+		    </div>
+		    <div class="form-group">
+				    <label for="lastname">Last Name:</label>
+				    <input type="text" class="form-control" id="lastname" placeholder="Enter Last Name" name="lastName" value="$!user.lastName" />
+		    </div>
+			<div class="form-group">
+		      <label for="email">Email:</label>
+		      <input type="email" class="form-control" id="email" placeholder="Enter email" name="emailId" value="$!user.emailId" />  
+		    </div>
+		    <div class="form-group">
+		      <label for="dob"> DOB:</label>
+		      <input type="text" class="form-control" id="dob" placeholder="Enter dob" name="dob" value="$!user.dob" />
+		    </div>
+		    <div class="form-group">
+		      <label for="active"> Status:</label>
+		      <select class="form-control" id="active" placeholder="--Select--" name="active"  >
+		      			<option value="1" #if($!user.active == 1)  selected="selected" #end > Active </option>
+		      			<option value="0" #if($!user.active == 0)  selected="selected" #end > Inactive </option>
+		      </select>
+		    </div>
+		    <div class="form-group">
+		      <label for="usertype">User Type:</label>
+		      <select class="form-control" id="usertype" placeholder="--Select--" name="userType"  >
+						      <option value="1" #if($!user.userType == 1)  selected="selected" #end > Administrator </option>			
+						      <option value="2" #if($!user.userType == 2)  selected="selected" #end > User </option>
+			  </select>
+		    </div>
+		    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+  
+  
+  <script type="text/javascript">
+  			$("#edituserform").submit(function(event) {
+  					event.preventDefault();
+  					var formData = $("#edituserform").serialize();
+  					$.ajax({
+  								type : 'POST',
+  								url : contextUrl+'modules/ums/editUser',
+  								data : formData,
+  								success : function(data) {
+  											$("#mymodal").modal("hide");
+  											if(data > 0) {
+  													alert('User Updated Successfully...');
+  											} else {
+  													alert('Unable to process your request....');
+  											}
+  								},
+  								error : function(jqXHR, status, error) {
+  									if(jqXHR.status == 403) {
+										alert('Your session has expired. Please login again...');
+										sessionTimeout(function() {
+												window.location.href=contextUrl;		
+										},1000);
+									} else {
+										alert('Unable to process your request.Please try again...');
+									}
+									console.log(error);
+									console.log(status);
+  								}
+  					});
+  			});
+  
+  </script>
