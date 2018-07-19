@@ -4,6 +4,14 @@ public class Role {
 			int id;
 			String role;
 			int active;
+			int createdBy;
+			
+			public int getCreatedBy() {
+				return createdBy;
+			}
+			public void setCreatedBy(int createdBy) {
+				this.createdBy = createdBy;
+			}
 			public int getId() {
 				return id;
 			}

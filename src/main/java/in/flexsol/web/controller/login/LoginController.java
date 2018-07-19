@@ -1,17 +1,14 @@
 package in.flexsol.web.controller.login;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import in.flexsol.modal.module.Module;
 import in.flexsol.modal.user.User;
 import in.flexsol.modal.user.UserVerification;
 import in.flexsol.service.login.LoginService;
 import in.flexsol.service.mail.EmailService;
 import in.flexsol.utility.Constants;
 import in.flexsol.utility.Utility;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +116,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public ModelAndView login(@ModelAttribute User user,BindingResult result,HttpServletRequest request) {
+	public ModelAndView loginPOST(@ModelAttribute User user,BindingResult result,HttpServletRequest request) {
 		int status;
 		if(result.hasErrors()) {
 			logger.error(result.toString());
@@ -161,6 +158,11 @@ public class LoginController {
 					return "redirect:"+contextPath;
 	}
 	
+	@RequestMapping(value="/login",method=RequestMethod.GET)
+	public String loginGET(HttpSession session) {
+					session.invalidate();
+					return "redirect:"+contextPath;
+	}
 	
 	
 }

@@ -6,18 +6,19 @@ public class Menu {
 			String menuHref;
 			String menuIcon;
 			int active;
-			int moduleType;
+			int moduleId;
 			public String getMenuIcon() {
 				return menuIcon;
 			}
 			public void setMenuIcon(String menuIcon) {
 				this.menuIcon = menuIcon;
 			}
-			public int getModuleType() {
-				return moduleType;
+	
+			public int getModuleId() {
+				return moduleId;
 			}
-			public void setModuleType(int moduleType) {
-				this.moduleType = moduleType;
+			public void setModuleId(int moduleId) {
+				this.moduleId = moduleId;
 			}
 			public int getId() {
 				return id;

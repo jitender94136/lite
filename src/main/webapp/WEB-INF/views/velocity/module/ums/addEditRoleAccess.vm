@@ -4,53 +4,65 @@
 														    <label for="role">Role:</label>
 														    <input type="text" class="form-control" id="role" placeholder="Enter Role" name="role" #if($!roleId > 0) value="$!role.role"  #end  />
 												    </div>
-												    <div class="form-group">
-														<label for="menuaccess">Menu Access:</label>
-															<select class="form-control" multiple  id="menuaccess">
-																  #foreach($s in $!modulesList) 		
-																	    <optgroup label="$!s.moduleName" >
-																	  			#foreach($k in $!menusList)
-																		  				#if($!k.moduleId == $!s.id)
-																		  						#foreach($p in $!roleBasedMenusList)
-																		  								#if($!roleId > 0 && $!p.id == $!k.id) 
-																		  									<option  value="$!k.id"  selected="selected" > $!k.menuName </option>
-																		  								#else 
-																		  									<option  value="$!k.id"  > $!k.menuName </option>
-																		  								#end	
-																		  						#end	
-																		  				#end 		
-																	  		    #end			
-																  		</optgroup>
-																  #end	    
-															</select>
-												    </div>
+												    #foreach($s in $!modulesList) 
+														    <div class="form-group">
+																<label for="menuaccess$!velocityCount">$!s.moduleName:</label>
+																	<select class="form-control selectpicker" multiple  id="menuaccess$!velocityCount" data-moduleid="$!s.id"  >
+																		 				#foreach($k in $!menusList)
+																				  				#if($!k.moduleId == $!s.id)
+																				  							<option  value="$!k.id"  #if($!roleId > 0 && $!roleBasedMenuIdsList.contains($!k.id))selected="selected" #end > $!k.menuName </option>
+																				  				#end 		
+																			  		    #end			
+																	</select>
+														    </div>
+												    #end
 													<button type="submit" class="btn btn-default">Submit</button>
 										  </form>
 
 										  
 <script type="text/javascript">
+				
+				$(document).ready(function() {
+								$('.selectpicker').selectpicker();
+				});
+				
+				var listSize = "$!modulesList.size()" ;
 
 				$("#addeditroleform").submit(function(event) {
 									event.preventDefault();
-				  					var formData = $("#addeditroleform").serialize();
+				  					var role = $("#role").val();
+				  					var moduleMenuMapping = "";
+				  					for(var i = 1; i <= Number(listSize); i++) {
+				  										var moduleId = $("#menuaccess"+i).attr("data-moduleid");
+				  										var menuIds = $("#menuaccess"+i).val() == null ?  "" : $("#menuaccess"+i).val(); 
+				  										console.log("moduleid -- "+moduleId);
+				  										console.log("menuids -- "+menuIds);
+				  										moduleMenuMapping = moduleMenuMapping + moduleId + "=" + menuIds +"-";
+				  					}
+				  					if(moduleMenuMapping.length > 0) {
+				  						moduleMenuMapping = moduleMenuMapping.substring(0,moduleMenuMapping.length - 1);
+				  					}
+				  					console.log(moduleMenuMapping);
+				  					//return false;
 				  					$.ajax({
 				  								type : 'POST',
 				  								url : contextUrl+'modules/ums/insertUpdateRoleAccess',
-				  								data : formData,
+				  								data : { "id" : "$!roleId" , "role" : role, "moduleMenuMapping" : moduleMenuMapping },
 				  								success : function(data) {
-				  											$("#mymodal").modal("hide");
 				  											if(data > 0) {
-				  													alert('User Updated Successfully...');
+				  													$("#addeditrolemodal").modal("hide");
+				  													alert('Role Mapping Saved/Updated Successfully...');
 				  											} else {
 				  													alert('Unable to process your request....');
 				  											}
 				  								},
 				  								error : function(jqXHR, status, error) {
+				  									$("#addeditrolemodal").modal("hide");
 				  									if(jqXHR.status == 403) {
+				  										setTimeout(function() {
+															window.location.href=contextUrl;		
+				  										},1000);
 														alert('Your session has expired. Please login again...');
-														sessionTimeout(function() {
-																window.location.href=contextUrl;		
-														},1000);
 													} else {
 														alert('Unable to process your request.Please try again...');
 													}
@@ -58,8 +70,6 @@
 													console.log(status);
 				  								}
 				  					});
-									
-									
 				});
 
 </script>

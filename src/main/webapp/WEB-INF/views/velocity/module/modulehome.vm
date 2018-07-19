@@ -13,8 +13,8 @@
          </div>
          <div class="col-md-10" id="wincontainer">
          			
-							  This is the module home page.
-							  Module Name is :- <h1> $!module.moduleName  </h1>
+							  
+							   <h1 style="text-align:center"> $!module.moduleName  </h1>
 		 </div>
 	</div>
 </div>

@@ -7,7 +7,10 @@ import in.flexsol.modal.user.User;
 import in.flexsol.service.login.LoginService;
 import in.flexsol.service.module.ModuleService;
 import in.flexsol.service.ums.UMSService;
+import in.flexsol.utility.Constants;
+import in.flexsol.utility.Utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
@@ -42,14 +46,12 @@ public class UMSController {
 		try {
 				List<User> usersList = loginService.getUsersList(); 
 				model.addAttribute("usersList", usersList);
-				return "ums/manageUsers";
+				return "module/ums/manageUsers";
 		} catch(Exception e) {
 			e.printStackTrace();
 			model.addAttribute("msg", -1);
 			return "message";
 		}
-		
-		
 	}
 	
 	
@@ -59,7 +61,7 @@ public class UMSController {
 		try {
 			User user = loginService.getUserData(userId);
 			model.addAttribute("user", user);
-			return "ums/editUser";
+			return "module/ums/editUser";
 		} catch(Exception e) {
 				e.printStackTrace();
 				model.addAttribute("msg", -1);
@@ -70,12 +72,14 @@ public class UMSController {
 	
 	@RequestMapping(value="/modules/ums/editUser",method=RequestMethod.POST)
 	@ResponseBody
-	public int editUser(@ModelAttribute User user, BindingResult result) {
+	public int editUser(@ModelAttribute User user, BindingResult result,HttpSession session) {
 		int status;
 		try {	
 			if(result.hasErrors()) {
 				result.toString();
 			}
+			User sessionUser = (User) session.getAttribute(Constants.USER);
+			user.setUpdatedBy(sessionUser.getId());
 			status = loginService.updateUserData(user);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -87,8 +91,11 @@ public class UMSController {
 	
 	@RequestMapping(value="/modules/ums/addUser",method=RequestMethod.POST)
 	@ResponseBody
-	public int addUser(@ModelAttribute User user, BindingResult result) {
-			return loginService.addNewUser(user);
+	public int addUser(@ModelAttribute User user, BindingResult result, HttpSession session) {
+		    User sessionUser = (User) session.getAttribute(Constants.USER);
+		    user.setCreatedBy(sessionUser.getId());
+		    user.setPassword(Utility.hashPassword("user"));
+		    return loginService.addNewUser(user);
 			//if user added then email id of user
 			//if there is an exception then -1
 			//if user with that email id already exists then 0
@@ -100,7 +107,7 @@ public class UMSController {
 			try {
 						List<User> usersList = loginService.getUsersList(); 
 						model.addAttribute("usersList", usersList);
-						return "ums/userModuleMapping";
+						return "module/ums/userModuleMappingGrid";
 			} catch(Exception e) {
 						e.printStackTrace();
 						model.addAttribute("msg", -1);
@@ -111,12 +118,19 @@ public class UMSController {
 	
 	
 	@RequestMapping(value="/modules/ums/editUserModuleMapping",method=RequestMethod.POST)
-	public String editUserModuleMapping(HttpServletRequest request,Model model) {
-			try {		//user module mapping 
-						//user's role in each module...
-						List<User> usersList = loginService.getUsersList(); 
-						model.addAttribute("usersList", usersList);
-						return "ums/editUserModuleMapping";
+	public String editUserModuleMapping(@RequestParam("userId") int userId,HttpServletRequest request,Model model) {
+			try {		
+						User user = loginService.getUserData(userId);
+						List<Module> modulesList = moduleService.finAllModules();
+						List<Module> userMappedModules = moduleService.getModulesList(user);
+						List<Integer> userMappedModulesList = new ArrayList<Integer>();
+						for(Module module  : userMappedModules) {
+									userMappedModulesList.add(module.getId());
+						}
+						model.addAttribute("user", user);
+						model.addAttribute("modulesList", modulesList);
+						model.addAttribute("userMappedModulesList", userMappedModulesList);
+						return "module/ums/editUserModuleMapping";
 			} catch(Exception e) {
 						e.printStackTrace();
 						model.addAttribute("msg", -1);
@@ -124,6 +138,29 @@ public class UMSController {
 			}
 	}
 	
+	@RequestMapping(value="/modules/ums/insertUpdateModuleMapping",method=RequestMethod.POST)
+	@ResponseBody
+	public int insertUpdateModuleMapping(@RequestParam int userId,@RequestParam String moduleMapping,HttpServletRequest request) {
+			try {
+						return umsService.insertUpdateModuleMapping(userId,moduleMapping);
+			} catch(Exception e) {
+						e.printStackTrace();
+						return -1;
+			}
+	}
+	
+	@RequestMapping(value="/modules/ums/manageRoles",method=RequestMethod.POST)
+	public String manageRoles(HttpSession httpSession, Model model) {
+		try {
+				List<Role> rolesList = umsService.findAllRoles(); 
+				model.addAttribute("rolesList", rolesList);
+				return "module/ums/manageRoles";
+		} catch(Exception e) {
+			e.printStackTrace();
+			model.addAttribute("msg", -1);
+			return "message";
+		}
+	}
 	
 	@RequestMapping(value="/modules/ums/addEditRoleScreen/{roleId}",method=RequestMethod.POST)
 	public String getEditRoleScreen(@PathVariable("roleId") int roleId, HttpSession httpSession, Model model) {
@@ -135,15 +172,35 @@ public class UMSController {
 			model.addAttribute("menusList", menusList);
 			if(roleId > 0) {
 				List<Menu> roleBasedMenusList = umsService.findMenusByRole(roleId);
-				Role role = loginService.getRoleById(roleId);
+				List<Integer> roleBasedMenuIdsList = new ArrayList<Integer>(); 
+				for(Menu m : roleBasedMenusList) {
+						roleBasedMenuIdsList.add(m.getId());
+				}
+				Role role = umsService.getRoleById(roleId);
 				model.addAttribute("role", role);
-				model.addAttribute("roleBasedMenusList", roleBasedMenusList);
+				model.addAttribute("roleBasedMenuIdsList", roleBasedMenuIdsList);
 			}
-			return "ums/addEditRoleAccess";
+			return "module/ums/addEditRoleAccess";
 		} catch(Exception e) {
 				e.printStackTrace();
 				model.addAttribute("msg", -1);
 				return "message";	
+		}
+	}
+	
+	
+	
+	@RequestMapping(value="modules/ums/insertUpdateRoleAccess",method=RequestMethod.POST)
+	@ResponseBody
+	public int insertUpdateRoleAccess(@ModelAttribute("role") Role role, @RequestParam String moduleMenuMapping, HttpSession httpSession) {
+		try {
+				User user = (User) httpSession.getAttribute(Constants.USER);
+				role.setCreatedBy(user.getId());
+				umsService.insertUpdateRoleAcess(role,moduleMenuMapping);
+				return 1;
+		} catch(Exception e) {
+				e.printStackTrace();
+				return -1;
 		}
 	}
 	

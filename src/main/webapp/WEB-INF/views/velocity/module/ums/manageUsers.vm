@@ -40,12 +40,13 @@
 
 
 
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addusermodal">Add User</button>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addusermodal" onclick='$("#adduserform").trigger("reset");'  >Add User</button>
 
 
 
 <table  class="table table-bordered">
 				<thead>
+							<th> User Code  </th>
 							<th> First Name  </th>
 							<th> Last Name </th>
 							<th> Email Id </th>
@@ -57,12 +58,13 @@
 				<tbody>
 				   #foreach($s in $!usersList)
 						<tr>
+				   			  <td> $!s.userCode </td>
 							  <td> $!s.firstName </td>
 							  <td> $!s.lastName </td>
 							  <td> $!s.emailId </td>
-							  <td> $!s.userType </td>
+							  <td> #if($!s.userType == 1) Administrator #elseif($!s.userType == 2) User #end </td>
 							  <td> #if($!s.active ==  1) Active #else  Inactive #end </td>
-							  <td> <i class="glyphicon glyphicon-edit" alt="Edit Role" onclick="editUserScreen($!s.userId)" > </i>  </td>
+							  <td> <i class="glyphicon glyphicon-edit" alt="Edit Role" onclick="editUserScreen($!s.id)" > </i>  </td>
 						</tr>	
 					#end	
 				</tbody>
@@ -79,8 +81,9 @@
 								url : contextUrl+"modules/ums/getEditUserScreen/"+userId,
 								success : function(data) {
 									console.log(data);
-									$("#mymodal").modal("hide");
+									
 									if(data == -1) {
+										$("#mymodal").modal("hide");
 										alert('Unable to process your reqeust...');
 									} else {
 										$("#modalbody").html(data);
@@ -90,7 +93,7 @@
 											$("#mymodal").modal("hide");
 											if(jqXHR.status == 403) {
 												alert('Your session has expired. Please login again...');
-												sessionTimeout(function() {
+												setTimeout(function() {
 														window.location.href=contextUrl;		
 												},1000);
 											} else {
@@ -122,7 +125,7 @@
 								error : function(jqXHR, status, error) {
 									if(jqXHR.status == 403) {
 										alert('Your session has expired. Please login again...');
-										sessionTimeout(function() {
+										setTimeout(function() {
 												window.location.href=contextUrl;		
 										},1000);
 									} else {

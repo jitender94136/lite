@@ -61,11 +61,7 @@ public class LoginServiceImpl implements LoginService {
 		return loginDao.updateUserData(user);
 	}
 
-	@Override
-	public Role getRoleById(int roleId) {
-		
-		return loginDao.getRoleById(roleId);
-	}
+	
 
 
 	

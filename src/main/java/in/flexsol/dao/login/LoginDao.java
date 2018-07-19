@@ -16,7 +16,7 @@ public interface LoginDao {
 	public User verifyUserLogin(User user);
 	public User getUserData(int userId);
 	public int updateUserData(User user);
-	public Role getRoleById(int roleId);
+	
 	
 	
 }

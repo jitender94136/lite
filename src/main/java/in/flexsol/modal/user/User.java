@@ -12,6 +12,13 @@ public class User {
 	int userType;
 	int active;
 	int createdBy;
+	int updatedBy;
+	public int getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(int updatedBy) {
+		this.updatedBy = updatedBy;
+	}
 	public int getCreatedBy() {
 		return createdBy;
 	}

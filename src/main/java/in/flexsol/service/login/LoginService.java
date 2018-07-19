@@ -17,5 +17,5 @@ public interface LoginService {
 	List<User> getUsersList();
 	User getUserData(int userId);
 	int updateUserData(User user);
-	Role getRoleById(int roleId);
+	
 }

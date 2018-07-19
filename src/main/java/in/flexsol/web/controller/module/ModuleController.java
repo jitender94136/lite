@@ -36,7 +36,7 @@ public class ModuleController {
 			   User user = (User)session.getAttribute(Constants.USER);
 			   List<Module> moduleList = moduleService.getModulesList(user);
 			   Integer status = (Integer)request.getAttribute("status");
-			   mv.addObject("status",status == null ? 0 : status.intValue());
+			   mv.addObject("status",status == null ? null : status.intValue());
 			   mv.addObject("moduleList", moduleList);
 		} catch(EmptyResultDataAccessException e) {
 			e.printStackTrace();

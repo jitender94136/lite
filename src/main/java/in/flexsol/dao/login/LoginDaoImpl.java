@@ -1,6 +1,5 @@
 package in.flexsol.dao.login;
 
-import in.flexsol.modal.user.Role;
 import in.flexsol.modal.user.User;
 import in.flexsol.modal.user.UserVerification;
 
@@ -23,12 +22,10 @@ public class LoginDaoImpl implements LoginDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	//https://docs.spring.io/spring/docs/3.0.0.M4/reference/html/ch12s05.html
-	//to get the resultset look at the end of the page...
 	
 	@Override
 	public int addNewUser(User user) {
-		int returnStatus = -1;
+		int returnStatus;
 		try {
 				SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
 				.withoutProcedureColumnMetaDataAccess()
@@ -61,20 +58,6 @@ public class LoginDaoImpl implements LoginDao {
 		}
 		return returnStatus;  // Will change this to return the Errorcode as an int...
 	}	
-		
-//		 Map<String,Object> returnData = jdbcTemplate.call(new CallableStatementCreator() {
-//			@Override
-//			public CallableStatement createCallableStatement(Connection con)
-//					throws SQLException {
-//				String sql = "call sp_save_user_details(?,?,?,?,?,?,?)";
-//				CallableStatement cstmt = con.prepareCall(sql);
-//				return cstmt;
-//			}
-//		}, new ArrayList<SqlParameter>());
-
-//		String sql = "call sp_save_user_details(?,?,?,?,?,?,?)";
-//		return jdbcTemplate.update(sql, new Object[] {user.getId(),user.getFirstName(),user.getLastName(),user.getEmailId(),user.getPassword(),user.getDob(),user.getActive()});		
-	
 
 
 	@Override
@@ -129,14 +112,10 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Override
 	public int updateUserData(User user) {
-		String sql = "update user_master set first_name = ?, last_name = ?, dob = ?, user_type = ?, active = ?";
-		return jdbcTemplate.update(sql, new Object[] {user.getFirstName(),user.getLastName(),user.getDob(),user.getUserType(),user.getActive()});
+		String sql = "update user_master set first_name = ?, last_name = ?, dob = ?, user_type = ?, active = ? where id = ?";
+		return jdbcTemplate.update(sql, new Object[] {user.getFirstName(),user.getLastName(),user.getDob(),user.getUserType(),user.getActive(),user.getId()});
 	}
 
-	@Override
-	public Role getRoleById(int roleId) {
-		String sql = "select * from role_master where id=?";
-		return jdbcTemplate.queryForObject(sql, new Object[] {roleId},new BeanPropertyRowMapper<Role>(Role.class));
-	}
+
 	
 }
