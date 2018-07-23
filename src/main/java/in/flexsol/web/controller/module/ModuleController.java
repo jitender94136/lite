@@ -54,7 +54,7 @@ public class ModuleController {
 		try {
 			   User user = (User) request.getSession().getAttribute(Constants.USER);
 			   Module module = moduleService.getModuleById(user,moduleId);
-			   List<Menu> menusList = moduleService.getModuleMenus(user,moduleId);//based on user role...
+			   List<Menu> menusList = moduleService.getModuleMenus(user,moduleId);//menus based on user role...
 			   model.addAttribute("menusList", menusList);
 			   model.addAttribute("module", module);
 			   return "module/modulehome";

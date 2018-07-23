@@ -2,12 +2,12 @@
 										<form  id="addeditroleform"  action="#">
 												  	<div class="form-group">
 														    <label for="role">Role:</label>
-														    <input type="text" class="form-control" id="role" placeholder="Enter Role" name="role" #if($!roleId > 0) value="$!role.role"  #end  />
+														    <input type="text" class="form-control" id="role" placeholder="Enter Role" name="role" #if($!roleId > 0) value="$!role.role"  #end required minlength="3" />
 												    </div>
 												    #foreach($s in $!modulesList) 
 														    <div class="form-group">
 																<label for="menuaccess$!velocityCount">$!s.moduleName:</label>
-																	<select class="form-control selectpicker" multiple  id="menuaccess$!velocityCount" data-moduleid="$!s.id"  >
+																	<select class="form-control selectpicker" multiple  id="menuaccess$!velocityCount" data-moduleid="$!s.id" title="--Select--" data-live-search="true">
 																		 				#foreach($k in $!menusList)
 																				  				#if($!k.moduleId == $!s.id)
 																				  							<option  value="$!k.id"  #if($!roleId > 0 && $!roleBasedMenuIdsList.contains($!k.id))selected="selected" #end > $!k.menuName </option>

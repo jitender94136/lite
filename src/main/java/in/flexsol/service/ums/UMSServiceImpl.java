@@ -3,6 +3,7 @@ package in.flexsol.service.ums;
 import in.flexsol.dao.ums.UMSDao;
 import in.flexsol.modal.menu.Menu;
 import in.flexsol.modal.user.Role;
+import in.flexsol.modal.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +69,17 @@ public class UMSServiceImpl implements UMSService {
 
 
 	@Override
-	public int insertUpdateModuleMapping(int userId, String moduleMapping) {
-		return 0;//umsDao.insertUpdateModuleMapping(userId, moduleMapping);
+	@Transactional
+	public void insertUpdateModuleMapping(User user, String moduleToRoleMapping) {
+		List<Object[]> inputList = new ArrayList<Object[]>();
+        String moduleEqualsRoleArr[] = moduleToRoleMapping.split(",");
+		for(int i = 0; i < moduleEqualsRoleArr.length; i++) {
+						String moduleId = moduleEqualsRoleArr[i].split("=")[0];
+						String roleId = moduleEqualsRoleArr[i].split("=")[1];
+						Object[] tmp = {user.getId(), moduleId, roleId,user.getCreatedBy()};
+				        inputList.add(tmp);
+		}
+		umsDao.insertUpdateModuleMapping(user, inputList);
 	}
 	
 }

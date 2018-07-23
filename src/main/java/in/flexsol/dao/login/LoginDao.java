@@ -1,21 +1,20 @@
 package in.flexsol.dao.login;
 
 import java.util.List;
-
-import in.flexsol.modal.module.Module;
-import in.flexsol.modal.user.Role;
+import java.util.Map;
 import in.flexsol.modal.user.User;
 import in.flexsol.modal.user.UserVerification;
 
 public interface LoginDao {
 
-	public int addNewUser(User user); 
-	public List<User> getUsersList();
-	public UserVerification getUserVerficationData(User user);
-	public int verifyUser(UserVerification userVerificationData);
-	public User verifyUserLogin(User user);
-	public User getUserData(int userId);
-	public int updateUserData(User user);
+	int addNewUser(User user); 
+	List<User> getUsersList();
+	UserVerification getUserVerficationData(User user);
+	int verifyUser(UserVerification userVerificationData);
+	User verifyUserLogin(User user);
+	User getUserData(int userId);
+	int updateUserData(User user);
+	Map<Integer, String> getUserMappedModules();
 	
 	
 	

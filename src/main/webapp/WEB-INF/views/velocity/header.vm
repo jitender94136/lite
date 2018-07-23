@@ -83,8 +83,8 @@
           <ul class="dropdown-menu">
             <li align="center" class="well">
                <!-- <div><img class="img-responsive" style="padding:2%;" src="http://placehold.it/120x120"/><a class="change" href="">Change Picture</a></div>  -->
-                <a href="modules" class="btn btn-sm btn-default"> Modules </a>
-                <a href="logout" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                <a href="modules" class="btn btn-lg btn-default"> Modules </a>
+                <a href="logout" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
             </li>
            </ul>
         </li>

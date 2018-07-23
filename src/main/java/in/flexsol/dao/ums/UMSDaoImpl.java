@@ -2,6 +2,7 @@ package in.flexsol.dao.ums;
 
 import in.flexsol.modal.menu.Menu;
 import in.flexsol.modal.user.Role;
+import in.flexsol.modal.user.User;
 import in.flexsol.web.controller.login.LoginController;
 
 import java.sql.Types;
@@ -89,18 +90,12 @@ public class UMSDaoImpl implements UMSDao {
 	}
 
 	@Override
-	public int insertUpdateModuleMapping(int userId, List<Integer> moduleIdsList) {
-//		String deleteQuery = "delete from role_menu_mapping_master where role_id = ?";
-//		int count = jdbcTemplate.update(deleteQuery, new Object[] {roleId});
-//		logger.debug("number of role menu mappings deleted : "+count);
-//	    String insertQuery = "insert into role_menu_mapping_master(role_id, menu_id,created_by) values (?,?,?)";
-//        List<Object[]> inputList = new ArrayList<Object[]>();
-//        for(String menuId : menusList){
-//            Object[] tmp = {roleId, menuId, userId};
-//            inputList.add(tmp);
-//        }
-//        jdbcTemplate.batchUpdate(insertQuery, inputList);
-		return 0;
+	public void insertUpdateModuleMapping(User user, List<Object[]> batchArgs) {
+		String deleteQuery = "delete from user_module_mapping_master where user_id = ?";
+		int count = jdbcTemplate.update(deleteQuery, new Object[] {user.getId()});
+		logger.debug("number of user module mappings deleted : "+count);
+		String insertQuery = "insert into user_module_mapping_master(user_id,module_id,role_id,created_by) values (?,?,?,?)";
+		jdbcTemplate.batchUpdate(insertQuery, batchArgs);
 	}
 	
 }

@@ -12,6 +12,7 @@ import in.flexsol.utility.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -105,8 +106,10 @@ public class UMSController {
 	@RequestMapping(value="/modules/ums/moduleMapping",method=RequestMethod.POST)
 	public String moduleMapping(HttpServletRequest request,Model model) {
 			try {
-						List<User> usersList = loginService.getUsersList(); 
+						List<User> usersList = loginService.getUsersList();
+						Map<Integer,String> userMappedModules = loginService.getUserMappedModules();
 						model.addAttribute("usersList", usersList);
+						model.addAttribute("userMappendModules", userMappedModules);
 						return "module/ums/userModuleMappingGrid";
 			} catch(Exception e) {
 						e.printStackTrace();
@@ -127,9 +130,11 @@ public class UMSController {
 						for(Module module  : userMappedModules) {
 									userMappedModulesList.add(module.getId());
 						}
+						List<Role> rolesList = umsService.findAllRoles();
 						model.addAttribute("user", user);
 						model.addAttribute("modulesList", modulesList);
 						model.addAttribute("userMappedModulesList", userMappedModulesList);
+						model.addAttribute("rolesList", rolesList);
 						return "module/ums/editUserModuleMapping";
 			} catch(Exception e) {
 						e.printStackTrace();
@@ -138,11 +143,14 @@ public class UMSController {
 			}
 	}
 	
-	@RequestMapping(value="/modules/ums/insertUpdateModuleMapping",method=RequestMethod.POST)
+	@RequestMapping(value="/modules/ums/insertUpdateModuleRoleMapping",method=RequestMethod.POST)
 	@ResponseBody
-	public int insertUpdateModuleMapping(@RequestParam int userId,@RequestParam String moduleMapping,HttpServletRequest request) {
+	public int insertUpdateModuleMapping(@ModelAttribute User userId, BindingResult result,@RequestParam String moduleToRoleMapping,HttpSession session) {
 			try {
-						return umsService.insertUpdateModuleMapping(userId,moduleMapping);
+						User sessionUser = (User)session.getAttribute(Constants.USER);
+						userId.setCreatedBy(sessionUser.getId());
+						umsService.insertUpdateModuleMapping(userId,moduleToRoleMapping);
+						return 1;
 			} catch(Exception e) {
 						e.printStackTrace();
 						return -1;

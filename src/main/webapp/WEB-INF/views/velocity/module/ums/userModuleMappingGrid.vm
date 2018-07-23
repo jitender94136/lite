@@ -21,7 +21,7 @@
 									  <td> $!s.firstName </td>
 									  <td> $!s.lastName </td>
 									  <td> $!s.emailId </td>
-									  <td> User Mapped Modules </td>
+									  <td> $!userMappendModules.get($!s.id) </td>
 									  <td> <i class="glyphicon glyphicon-edit" title="Edit Module Mapping"  onclick="editUserModuleMapping($!s.id)" > </i>  </td>
 								</tr>	
 						#end

@@ -2,6 +2,7 @@ package in.flexsol.service.ums;
 
 import in.flexsol.modal.menu.Menu;
 import in.flexsol.modal.user.Role;
+import in.flexsol.modal.user.User;
 
 import java.util.List;
 
@@ -17,6 +18,6 @@ public interface UMSService {
 
 	void insertUpdateRoleAcess(Role role, String roleMenuMapping);
 
-	int insertUpdateModuleMapping(int userId, String moduleMapping);
+	void insertUpdateModuleMapping(User user, String moduleToRoleMapping);
 
 }

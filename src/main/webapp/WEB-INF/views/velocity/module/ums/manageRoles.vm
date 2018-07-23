@@ -19,7 +19,7 @@
 
 
 
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addusermodal"  onclick="addEditRoleAccess(0)" >Add Role</button>
+<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addusermodal"  onclick="addEditRoleAccess(0)" style="margin-bottom:5px;" >Add Role</button>
 
 <table   class="table table-bordered" >
 				<thead>

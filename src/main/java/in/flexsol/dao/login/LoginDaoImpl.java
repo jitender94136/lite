@@ -39,6 +39,7 @@ public class LoginDaoImpl implements LoginDao {
 					new SqlParameter("in_password", Types.VARCHAR ),
 					new SqlParameter( "in_dob", Types.VARCHAR),
 					new SqlParameter("in_active", Types.TINYINT),
+					new SqlParameter("in_registered", Types.INTEGER),
 					new SqlParameter("in_created_by", Types.INTEGER),
 					new SqlOutParameter("out_status",Types.TINYINT));
 				Map<String, Object> result = new HashMap<>();
@@ -49,6 +50,11 @@ public class LoginDaoImpl implements LoginDao {
 				result.put("in_password", user.getPassword());
 				result.put("in_dob", user.getDob());
 				result.put("in_active", user.getActive());
+				if(user.getCreatedBy() > 0) {	
+						result.put("in_registered", 1);
+				} else {
+						result.put("in_registered", 0);
+				}
 				result.put("in_created_by", user.getCreatedBy());
 			    result = jdbcCall.execute(result);
 			    returnStatus = (int)result.get("out_status");
@@ -112,8 +118,22 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Override
 	public int updateUserData(User user) {
-		String sql = "update user_master set first_name = ?, last_name = ?, dob = ?, user_type = ?, active = ? where id = ?";
-		return jdbcTemplate.update(sql, new Object[] {user.getFirstName(),user.getLastName(),user.getDob(),user.getUserType(),user.getActive(),user.getId()});
+		String sql = "update user_master set first_name = ?, last_name = ?, dob = ?, user_type = ?, active = ?, updated_by = ? where id = ?";
+		return jdbcTemplate.update(sql, new Object[] {user.getFirstName(),user.getLastName(),user.getDob(),user.getUserType(),user.getActive(), user.getUpdatedBy() ,user.getId()});
+	}
+
+
+	@Override
+	public Map<Integer, String> getUserMappedModules() {
+		Map<Integer, String> userModulesMap = new HashMap<Integer, String>();  
+		List<Map<String,Object>> rowsList = jdbcTemplate.queryForList("call sp_get_user_mapped_modules()");
+		for(Map<String,Object> row : rowsList) {
+					Integer userId = (Integer)row.get("user_id");
+					String modules = (String)row.get("modules");
+					userModulesMap.put(userId,modules);
+					
+		}
+		return userModulesMap;
 	}
 
 

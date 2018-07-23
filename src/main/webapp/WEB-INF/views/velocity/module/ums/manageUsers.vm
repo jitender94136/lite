@@ -7,23 +7,23 @@
 										<form  id="adduserform"  action="#">
 												  	<div class="form-group">
 														    <label for="firstname">First Name:</label>
-														    <input type="text" class="form-control" id="firstname" placeholder="Enter First Name" name="firstName"  />
+														    <input type="text" class="form-control" id="firstname" placeholder="Enter First Name" name="firstName" required  />
 												    </div>
 												    <div class="form-group">
 														    <label for="lastname">Last Name:</label>
-														    <input type="text" class="form-control" id="lastname" placeholder="Enter Last Name" name="lastName"  />
+														    <input type="text" class="form-control" id="lastname" placeholder="Enter Last Name" name="lastName"  required />
 												    </div>
 													<div class="form-group">
 														      <label for="email">Email:</label>
-														      <input type="email" class="form-control" id="email" placeholder="Enter email" name="emailId"  />  
+														      <input type="email" class="form-control" id="email" placeholder="Enter email" name="emailId" required />  
 												    </div>
 												    <div class="form-group">
 														      <label for="dob"> DOB:</label>
-														      <input type="text" class="form-control" id="dob" placeholder="Enter dob" name="dob"  />
+														      <input type="text" class="form-control" id="dob" placeholder="yyyy-mm-dd" name="dob" required  pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" title="Please enter the date in yyyy-mm-dd format"  />
 												    </div>
 												    <div class="form-group">
 												      <label for="usertype">User Type:</label>
-												      <select class="form-control" id="usertype" placeholder="--Select--" name="userType"  >
+												      <select class="form-control" id="usertype" placeholder="--Select--" name="userType" required >
 																      <option value="1"  > Administrator </option>			
 																      <option value="2"  > User </option>
 													  </select>
@@ -40,7 +40,7 @@
 
 
 
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addusermodal" onclick='$("#adduserform").trigger("reset");'  >Add User</button>
+<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addusermodal" onclick='$("#adduserform").trigger("reset");' style="margin-bottom:5px;"  >Add User</button>
 
 
 
@@ -57,15 +57,17 @@
 		
 				<tbody>
 				   #foreach($s in $!usersList)
-						<tr>
-				   			  <td> $!s.userCode </td>
-							  <td> $!s.firstName </td>
-							  <td> $!s.lastName </td>
-							  <td> $!s.emailId </td>
-							  <td> #if($!s.userType == 1) Administrator #elseif($!s.userType == 2) User #end </td>
-							  <td> #if($!s.active ==  1) Active #else  Inactive #end </td>
-							  <td> <i class="glyphicon glyphicon-edit" alt="Edit Role" onclick="editUserScreen($!s.id)" > </i>  </td>
-						</tr>	
+				   			#if($!s.userType != 1)
+								<tr>
+						   			  <td> $!s.userCode </td>
+									  <td> $!s.firstName </td>
+									  <td> $!s.lastName </td>
+									  <td> $!s.emailId </td>
+									  <td> #if($!s.userType == 1) Administrator #elseif($!s.userType == 2) User #end </td>
+									  <td> #if($!s.active ==  1) Active #else  Inactive #end </td>
+									  <td> <i class="glyphicon glyphicon-edit" alt="Edit Role" onclick="editUserScreen($!s.id)" > </i>  </td>
+								</tr>
+							#end	
 					#end	
 				</tbody>
 
@@ -114,7 +116,7 @@
 								data : formData,
 								success : function(data) {
 											if(data > 0) {
-													$("#mymodal").modal("hide");
+													$("#addusermodal").modal("hide");
 													alert('User Added Successfully...');
 											} else if(data == 0) {
 													alert('User with this email id already exists...');

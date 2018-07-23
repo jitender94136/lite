@@ -17,14 +17,28 @@
 										    					<input type="text" class="form-control" id="emailid" value="$!user.emailId"   disabled />
 										    		</div>
 												    
-													 <div class="form-group">
+													 <div class="form-group"  id="modules"  >
 															<label for="moduleaccess"> Modules:</label>
-																<select class="form-control selectpicker" multiple id="moduleaccess" data-live-search="true" title="--Select--">
-																								#foreach($s in $!modulesList) 
-																			  							<option  value="$!s.id" #if($!userMappedModulesList.contains($!s.id)) selected="selected" #end > $!s.moduleName </option>
-																			  					#end
-																</select>
-													 </div>
+															  
+																#foreach($s in $!modulesList)
+																	<div class="checkbox">
+																						<label>  <input type="checkbox" value="$!s.id" onchange="moduleChange(this)" /> $!s.moduleName </label>
+																					
+																						<div style="display:none;overflow:hidden;overflow-x:scroll" id="roleform$!s.id"    >
+																									
+																										   #foreach($k in $!rolesList) 
+																										   		<div class="col-sm-3">
+																															<label class="radio-inline" >
+																																		<input type="radio" name="optradio$!s.id" value="$!k.id" style="margin-left:-10px" #if($!velocityCount == 1) checked #end /> $!k.role
+																														    </label>
+																												</div>
+																										   #end	
+																								  
+																						</div>				
+																				      
+																	</div>	
+																#end	
+													</div>
 												    
 													<button type="submit" class="btn btn-default">Submit</button>
 										  </form>
@@ -36,23 +50,54 @@
 								$('.selectpicker').selectpicker();
 				});
 				
+				function moduleChange(element) {
+							var moduleId = $(element).val();
+							if($(element).is(':checked')) {
+								$("#roleform"+moduleId).css("display","block");
+							} else {
+								$("#roleform"+moduleId).css("display","none");
+							}
+				}
 				
 
 				$("#modulemappingform").submit(function(event) {
 									event.preventDefault();
 				  					var userId = $("#userid").val();
-				  					var moduleMapping = $("#moduleaccess").val() == null ? "" : $("#moduleaccess").val();
-				  					
-				  					
-				  					
+				  					console.log(userId);
+				  					var moduleToRoleMapping = "";
+				  					$("#modules").find('input:checkbox').each(function(index,element) {
+				  						console.log(index + "-------" + element);
+				  						if($(element).is(":checked")) {
+				  								var moduleId = $(element).val();
+				  								console.log(moduleId);
+				  								var roleId = $(element).closest('div').find('input:radio').each(function(i,e) {
+				  											if($(e).is(':checked')) {	
+				  															
+				  															var roleId = $(e).val();
+				  															console.log("-----------"+roleId);
+				  															moduleToRoleMapping = moduleToRoleMapping + moduleId + "=" + roleId + ",";
+				  											}
+				  								});
+				  								
+				  						}
+				  							
+				  					});
+				  					if(moduleToRoleMapping.length > 0) {
+				  						moduleToRoleMapping = moduleToRoleMapping.substring(0,moduleToRoleMapping.length - 1);
+				  					}
+				  					console.log(moduleToRoleMapping);
+				  					if(moduleToRoleMapping == "") {
+				  						alert('Please select at least one module...');	
+				  						return false;
+				  					}
 				  					$.ajax({
 				  								type : 'POST',
-				  								url : contextUrl+'modules/ums/insertUpdateModuleMapping',
-				  								data : { "userId" : userId,  "moduleMapping" : moduleMapping  },
+				  								url : contextUrl+'modules/ums/insertUpdateModuleRoleMapping',
+				  								data : { "id" : userId,  "moduleToRoleMapping" : moduleToRoleMapping  },
 				  								success : function(data) {
 				  											if(data > 0) {
 				  													$("#mymodal").modal("hide");
-				  													alert('Module Mapping Saved/Updated Successfully...');
+				  													alert('Module To Role Mapping Saved/Updated Successfully...');
 				  											} else {
 				  													alert('Unable to process your request....');
 				  											}
