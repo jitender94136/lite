@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sendgrid.Content;
@@ -20,9 +21,13 @@ public class SendGridEmailServiceImpl implements EmailService {
 	    private static final Logger logger = LoggerFactory.getLogger(SendGridEmailServiceImpl.class);
 		private SendGrid sendGridClient;
 	
+		@Value("${SENDGRID_API_KEY}")
+		String sendGridApiKey;
+		
+		
 		//@Autowired
 		public SendGridEmailServiceImpl(/*SendGrid sendGridClient*/) {
-			this.sendGridClient =  new SendGrid("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");
+			this.sendGridClient =  new SendGrid(sendGridApiKey);
 		}
 		
 		@Override

@@ -1,15 +1,25 @@
+<html>
 
+<head> 
+  <meta http-equiv="refresh" content="3; URL=modules" />
+</head>
 
-#if($!status == -1)
+		<body>
 
-  Not able to process your request....
+				#if($!status == -1)
+				
+				  Not able to process your request....
+					
+				#elseif($!status == 0) 
+				
+				  Email-id already registered....<span> try </span> with different email id...
+				
+				#elseif($!status > 0)
+				
+				  Please check your email and verify your email id within 15 minutes....
+				
+				#end
+		
+		</body>
+</html>
 	
-#elseif($!status == 0) 
-
-email id already registered....<span> try </span> with different email id...
-
-#elseif($!status > 0)
-
-Please verify your email id within 15 minutes....
-
-#end

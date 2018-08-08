@@ -9,6 +9,7 @@ public class User {
 	String emailId;
 	String password;
 	String dob;
+	String userPic;
 	int userType;
 	int active;
 	int createdBy;
@@ -78,5 +79,11 @@ public class User {
 	}
 	public void setUserType(int userType) {
 		this.userType = userType;
+	}
+	public String getUserPic() {
+		return userPic;
+	}
+	public void setUserPic(String userPic) {
+		this.userPic = userPic;
 	}
 }

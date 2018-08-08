@@ -38,13 +38,14 @@ public class ModuleController {
 			   Integer status = (Integer)request.getAttribute("status");
 			   mv.addObject("status",status == null ? null : status.intValue());
 			   mv.addObject("moduleList", moduleList);
+			   mv.addObject("user",user);
 		} catch(EmptyResultDataAccessException e) {
 			e.printStackTrace();
 			mv.addObject("status", -2);				
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		mv.setViewName("module/modulelist");
+		mv.setViewName("theme/module/thememodules");
 		return mv;
 	}
 	
@@ -57,7 +58,7 @@ public class ModuleController {
 			   List<Menu> menusList = moduleService.getModuleMenus(user,moduleId);//menus based on user role...
 			   model.addAttribute("menusList", menusList);
 			   model.addAttribute("module", module);
-			   return "module/modulehome";
+			   return "theme/module/thememodulehome";
 		} catch(EmptyResultDataAccessException e) {
 					e.printStackTrace();
 					request.setAttribute("status", -1);				

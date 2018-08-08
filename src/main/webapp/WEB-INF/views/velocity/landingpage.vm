@@ -4481,7 +4481,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	animation-name: scaleIn;
 }
 
-    </style>
+		.invalid {
+				border : 1px solid red !important;
+		}
+		
+		.valid {
+				border : 1px solid green !important;
+		}
+
+  </style>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 </head>
@@ -4518,12 +4526,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                                 <h1>Log in</h1> 
                                
                             	<p> 
-		                            <label for="emailid" class="uname" > Email Id </label>
-		                            <input id="emailid" name="emailId" required="required" type="text" placeholder="Email Id"/>
+		                            <label for="emailidlogin" class="uname" > Email Id </label>
+		                            <input id="emailidlogin" name="emailId" required="required" type="text" placeholder="Email Id"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"   />
 		                        </p>
                                 <p> 
                                     <label for="password" class="youpasswd"> Your password </label>
-                                    <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" /> 
+                                    <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" minlength="4" /> 
                                 </p>
                                 <p> <button type="submit" style="text-align:right"> submit </button> </p>
                             <!--  <p class="keeplogin"> 
@@ -4547,7 +4555,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                         </div>
 
                         <div id="register" class="animate form">
-                            <form  action="register" autocomplete="on"  method="post"> 
+                            <form  action="register" autocomplete="on"  method="post" id="registerform"> 
                                 <h1> Sign up </h1> 
                                 <p> 
 	                                <label for="firstname" class="uname" > First Name </label>
@@ -4559,22 +4567,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	                            </p>
 	                            <p> 
 		                            <label for="emailid" class="uname" > Email Id </label>
-		                            <input id="emailid" name="emailId" required="required" type="text" placeholder="Email Id"/>
+		                            <input id="emailid" name="emailId" required="required" type="text" placeholder="Email Id" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"   />
 		                        </p>
 	                            <p> 
 		                            <label for="dob" class="uname" > Date Of Birth </label>
-		                            <input id="dob" name="dob" required="required" type="text" placeholder="Date of birth"/>
+		                            <input id="dob" name="dob" required="required" type="text" placeholder="yyyy-MM-dd"  pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" />
 		                        </p>
                                 <p> 
                                     <label for="passwordsignup" class="youpasswd" >Your password </label>
-                                    <input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="eg. X8df!90EO"/>
+                                    <input id="passwordsignup" name="password" required="required" type="password" placeholder="eg. X8df!90EO" minlength="4" />
                                 </p>
                                 <p> 
                                     <label for="passwordsignup_confirm" class="youpasswd" >Please confirm your password </label>
-                                    <input id="passwordsignup_confirm" name="passwordsignup_confirm" required="required" type="password" placeholder="eg. X8df!90EO"/>
+                                    <input id="passwordsignup_confirm" name="passwordsignup_confirm" required="required" type="password" placeholder="eg. X8df!90EO" minlength="4" onkeyup="matchPassword()" />
                                 </p>
                                 <p class="signin button"> 
-									<input type="submit" value="Sign up"/> 
+									<input type="button" value="Sign up" id="signupbutton" /> 
 								</p>
                                 <p class="change_link">  
 									Already a member ?
@@ -4593,6 +4601,30 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #parse("/WEB-INF/views/velocity/contextdata.vm")
 
 <script type="text/javascript">
+		
+		function matchPassword() {
+						console.log("ïnside match passwd function...");
+						var passwd = $("#passwordsignup").val();
+						var confirmPasswd = $("#passwordsignup_confirm").val();
+						if(passwd == confirmPasswd) {
+								$("#passwordsignup").removeClass("invalid").addClass("valid");
+								$("#passwordsignup_confirm").removeClass("invalid").addClass("valid");
+								return true;
+						} else {
+								$("#passwordsignup").removeClass("valid").addClass("invalid");
+								$("#passwordsignup_confirm").removeClass("valid").addClass("invalid");
+								return false;
+						}
+		}
+		
+		$("#signupbutton").click(function(event) {
+						event.preventDefault();
+						if(matchPassword() == false) {
+							return false;
+						}
+						$("#registerform").submit();
+		});
+		
 		$(document).ready(function() {
 						console.log('before the ajax request.....');
 						$.ajax({
@@ -4608,6 +4640,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 							    }
 						});
 		});
+		
+		
 </script>
 </body>
 </html>

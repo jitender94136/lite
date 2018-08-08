@@ -38,6 +38,7 @@ public class LoginDaoImpl implements LoginDao {
 					new SqlParameter( "in_email_id", Types.VARCHAR ),
 					new SqlParameter("in_password", Types.VARCHAR ),
 					new SqlParameter( "in_dob", Types.VARCHAR),
+					new SqlParameter("in_user_type",Types.INTEGER),
 					new SqlParameter("in_active", Types.TINYINT),
 					new SqlParameter("in_registered", Types.INTEGER),
 					new SqlParameter("in_created_by", Types.INTEGER),
@@ -50,9 +51,11 @@ public class LoginDaoImpl implements LoginDao {
 				result.put("in_password", user.getPassword());
 				result.put("in_dob", user.getDob());
 				result.put("in_active", user.getActive());
-				if(user.getCreatedBy() > 0) {	
+				if(user.getCreatedBy() > 0) {
+						result.put("in_user_type",user.getUserType());
 						result.put("in_registered", 1);
 				} else {
+						result.put("in_user_type",2);
 						result.put("in_registered", 0);
 				}
 				result.put("in_created_by", user.getCreatedBy());
@@ -76,13 +79,13 @@ public class LoginDaoImpl implements LoginDao {
 	
 	@Override
 	public List<User> getUsersList() {
-		String sql = "select * from `filite`.user_master";
+		String sql = "select * from `filite`.user_master where registered = 1";
 		return jdbcTemplate.query(sql,new BeanPropertyRowMapper<User>(User.class));		
 	}
 
 	@Override
 	public UserVerification getUserVerficationData(User user) {
-		 String sql = "select * from `filite`.user_verification_master where id =  ?";
+		 String sql = "select * from `filite`.user_verification_master where user_id =  ?";
 		 return jdbcTemplate.queryForObject(sql, new Object[] {user.getId()},new BeanPropertyRowMapper<UserVerification>(UserVerification.class));
 	}
 

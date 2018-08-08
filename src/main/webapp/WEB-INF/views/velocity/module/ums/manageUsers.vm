@@ -3,6 +3,10 @@
 <div id="addusermodal" class="modal fade" role="dialog">
 		  <div class="modal-dialog">
 		    	    <div class="modal-content">
+		    	    			  <div  class="modal-header modalhead">
+		    	    			  				<p> Add User </p>
+		    	    			  </div>
+		    	    			  
 							      <div id="addusermodalbody"  class="modal-body">
 										<form  id="adduserform"  action="#">
 												  	<div class="form-group">
@@ -15,64 +19,77 @@
 												    </div>
 													<div class="form-group">
 														      <label for="email">Email:</label>
-														      <input type="email" class="form-control" id="email" placeholder="Enter email" name="emailId" required />  
+														      <input type="text" class="form-control" id="email" placeholder="Enter email" name="emailId" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"  />  
 												    </div>
 												    <div class="form-group">
 														      <label for="dob"> DOB:</label>
 														      <input type="text" class="form-control" id="dob" placeholder="yyyy-mm-dd" name="dob" required  pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" title="Please enter the date in yyyy-mm-dd format"  />
 												    </div>
-												    <div class="form-group">
-												      <label for="usertype">User Type:</label>
-												      <select class="form-control" id="usertype" placeholder="--Select--" name="userType" required >
-																      <option value="1"  > Administrator </option>			
-																      <option value="2"  > User </option>
-													  </select>
-												    </div>
-												    <button type="submit" class="btn btn-default">Submit</button>
+													<div class="form-group">
+														      <label for="usertype">User Type:</label>
+														      <select class="form-control" id="usertype" placeholder="--Select--" name="userType" required >
+														      				  <option value="" > --Select-- </option>
+																		      <option value="1"  > Administrator </option>			
+																		      <option value="2"  > User </option>
+															  </select>
+													</div>
+													    
+												    <button type="submit" class="btn btn-success">Save</button>
+												    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
 										  </form>
 							      </div>
-							      <div class="modal-footer">
-							      		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							      </div>
+							     
 				    </div>
 		  </div>
 </div>
 
 
 
-<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addusermodal" onclick='$("#adduserform").trigger("reset");' style="margin-bottom:5px;"  >Add User</button>
+<section class="content-header">
+		<ol class="breadcrumb" >
+				<li > <a style="cursor:pointer"> <i class="fa fa-dashboard"> </i> UMS </a></li>
+				<li class="active" ><a style="cursor:pointer"><i class="fa fa-dashboard"></i> Manage Users </a></li>
+		</ol>
+</section>
+
+<section class="content" >
+			  <div class="row" >
+					  		<div class="col-md-12 col-sm-12 col-xs-12">
+									  		<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addusermodal" onclick='$("#adduserform").trigger("reset");' style="margin-bottom:5px;"  >Add User</button>
+				
+									  		<table  class="table table-bordered">
+									  						<thead>
+									  									<th> User Code  </th>
+									  									<th> First Name  </th>
+									  									<th> Last Name </th>
+									  									<th> Email Id </th>
+									  									<th> User Type </th>
+									  									<th> Status </th>
+									  									<th> Actions </th>
+									  						</thead>
+									  				
+									  						<tbody>
+									  						   #foreach($s in $!usersList)
+									  						   		
+									  										<tr>
+									  								   			  <td> $!s.userCode </td>
+									  											  <td> $!s.firstName </td>
+									  											  <td> $!s.lastName </td>
+									  											  <td> $!s.emailId </td>
+									  											  <td> #if($!s.userType == 1) Administrator #elseif($!s.userType == 2) User #end </td>
+									  											  <td> #if($!s.active ==  1) Active #else  Inactive #end </td>
+									  											  <td> <i class="glyphicon glyphicon-edit" title="Edit Role" onclick="editUserScreen($!s.id)" > </i>  </td>
+									  										</tr>
+									  										
+									  							#end	
+									  						</tbody>
+									  		</table>
+
+					  		</div>
+			  </div>
+</section>
 
 
-
-<table  class="table table-bordered">
-				<thead>
-							<th> User Code  </th>
-							<th> First Name  </th>
-							<th> Last Name </th>
-							<th> Email Id </th>
-							<th> User Type </th>
-							<th> Status </th>
-							<th> Actions </th>
-				</thead>
-		
-				<tbody>
-				   #foreach($s in $!usersList)
-				   			#if($!s.userType != 1)
-								<tr>
-						   			  <td> $!s.userCode </td>
-									  <td> $!s.firstName </td>
-									  <td> $!s.lastName </td>
-									  <td> $!s.emailId </td>
-									  <td> #if($!s.userType == 1) Administrator #elseif($!s.userType == 2) User #end </td>
-									  <td> #if($!s.active ==  1) Active #else  Inactive #end </td>
-									  <td> <i class="glyphicon glyphicon-edit" alt="Edit Role" onclick="editUserScreen($!s.id)" > </i>  </td>
-								</tr>
-							#end	
-					#end	
-				</tbody>
-
-
-</table>
 
 
 <script type="text/javascript">
@@ -88,6 +105,7 @@
 										$("#mymodal").modal("hide");
 										alert('Unable to process your reqeust...');
 									} else {
+										$("#mymodal .modal-header").html("<p> <b> Edit User </b> </p>");
 										$("#modalbody").html(data);
 									}	
 								},

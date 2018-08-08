@@ -22,14 +22,18 @@
 															  
 																#foreach($s in $!modulesList)
 																	<div class="checkbox">
-																						<label>  <input type="checkbox" value="$!s.id" onchange="moduleChange(this)" /> $!s.moduleName </label>
+																						<label>  <input type="checkbox" value="$!s.id" onchange="moduleChange(this)"  #if($!userMappedModuleIdsList.contains($!s.id)) checked  #end /> $!s.moduleName </label>
 																					
-																						<div style="display:none;overflow:hidden;overflow-x:scroll" id="roleform$!s.id"    >
-																									
+																						<div style="#if(! $!userMappedModuleIdsList.contains($!s.id)) display:none; #end overflow:hidden;overflow-x:scroll" id="roleform$!s.id"    >
+																										   #set($moduleMappedRolesIdsList  = $!moduleMappedRoleIdsMap.get($!s.id))	
 																										   #foreach($k in $!rolesList) 
 																										   		<div class="col-sm-3">
 																															<label class="radio-inline" >
-																																		<input type="radio" name="optradio$!s.id" value="$!k.id" style="margin-left:-10px" #if($!velocityCount == 1) checked #end /> $!k.role
+																																		#if($!moduleMappedRolesIdsList.size() > 0)
+																																				<input type="radio" name="optradio$!s.id" value="$!k.id"     #if($!moduleMappedRolesIdsList.contains($!k.id)) checked #end    /> $!k.role
+																																		#else 	
+																																				<input type="radio" name="optradio$!s.id" value="$!k.id"     #if($!velocityCount == 1) checked #end    /> $!k.role
+																																		#end		
 																														    </label>
 																												</div>
 																										   #end	
@@ -40,7 +44,8 @@
 																#end	
 													</div>
 												    
-													<button type="submit" class="btn btn-default">Submit</button>
+													<button type="submit" class="btn btn-success">Save</button>
+													<button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
 										  </form>
 
 										  

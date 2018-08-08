@@ -1,35 +1,44 @@
 
 
+<section class="content-header">
+		<ol class="breadcrumb" >
+				<li > <a style="cursor:pointer"> <i class="fa fa-dashboard"> </i> UMS </a></li>
+				<li class="active" ><a style="cursor:pointer"><i class="fa fa-dashboard"></i> Manage User Module Mapping </a></li>
+		</ol>
+</section>
 
-
-<table  class="table table-bordered">
-				<thead>
-							<th> User Code  </th>
-							<th> First Name  </th>
-							<th> Last Name </th>
-							<th> Email Id </th>
-							<th> Modules </th>
-							<th> Actions </th>
-				</thead>
-		
-				<tbody>
-				    #foreach($s in $!usersList)
-				    	#if($!s.userType != 1)
-								<tr>
-						    
-						    		  <td> $!s.userCode </td>
-									  <td> $!s.firstName </td>
-									  <td> $!s.lastName </td>
-									  <td> $!s.emailId </td>
-									  <td> $!userMappendModules.get($!s.id) </td>
-									  <td> <i class="glyphicon glyphicon-edit" title="Edit Module Mapping"  onclick="editUserModuleMapping($!s.id)" > </i>  </td>
-								</tr>	
-						#end
-					#end	
-				</tbody>
-
-
-</table>
+<section class="content" >
+			  <div class="row" >
+					  		<div class="col-md-12 col-sm-12 col-xs-12">
+											<br/><br/>
+											<table  class="table table-bordered">
+															<thead>
+																		<th> User Code  </th>
+																		<th> First Name  </th>
+																		<th> Last Name </th>
+																		<th> Email Id </th>
+																		<th> Modules </th>
+																		<th> Actions </th>
+															</thead>
+													
+															<tbody>
+															    #foreach($s in $!usersList)
+															    	#if($!s.userType != 1)
+																			<tr>
+																	    
+																	    		  <td> $!s.userCode </td>
+																				  <td> $!s.firstName </td>
+																				  <td> $!s.lastName </td>
+																				  <td> $!s.emailId </td>
+																				  <td> $!userMappendModules.get($!s.id) </td>
+																				  <td> <i class="glyphicon glyphicon-edit" title="Edit Module Mapping"  onclick="editUserModuleMapping($!s.id)" > </i>  </td>
+																			</tr>	
+																	#end
+																#end	
+															</tbody>
+											
+											
+											</table>
 
 
 <script type="text/javascript">
@@ -45,6 +54,7 @@
 										if(data == -1) {
 											alert('unable to process your request...');
 										} else {
+											$("#mymodal .modal-header").html("<p> <b> User Module Mapping </b> </p>");
 											$("#modalbody").html(data);
 										}
 							},

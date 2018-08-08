@@ -10,27 +10,30 @@
 		    </div>
 			<div class="form-group">
 		      <label for="email">Email:</label>
-		      <input type="email" class="form-control" id="email" placeholder="Enter email" name="emailId" value="$!user.emailId" required  />  
+		      <input type="text" class="form-control" id="email" placeholder="Enter email" name="emailId" value="$!user.emailId" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" />  
 		    </div>
 		    <div class="form-group">
 		      <label for="dob"> DOB:</label>
 		      <input type="text" class="form-control" id="dob" placeholder="Enter dob" name="dob" value="$!user.dob"  required pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" />
 		    </div>
 		    <div class="form-group">
+			      <label for="usertype">User Type:</label>
+			      <select class="form-control" id="usertype" placeholder="--Select--" name="userType"  required >
+			      				  <option value="" > --Select-- </option>	
+							      <option value="1" #if($!user.userType == 1)  selected="selected" #end > Administrator </option>			
+							      <option value="2" #if($!user.userType == 2)  selected="selected" #end > User </option>
+				  </select>
+			</div> 
+		    <div class="form-group">
 		      <label for="active"> Status:</label>
 		      <select class="form-control" id="active" placeholder="--Select--" name="active" required >
+		      			<option value="" > --Select-- </option>	
 		      			<option value="1" #if($!user.active == 1)  selected="selected" #end > Active </option>
 		      			<option value="0" #if($!user.active == 0)  selected="selected" #end > Inactive </option>
 		      </select>
 		    </div>
-		    <div class="form-group">
-		      <label for="usertype">User Type:</label>
-		      <select class="form-control" id="usertype" placeholder="--Select--" name="userType"  required >
-						      <option value="1" #if($!user.userType == 1)  selected="selected" #end > Administrator </option>			
-						      <option value="2" #if($!user.userType == 2)  selected="selected" #end > User </option>
-			  </select>
-		    </div>
-		    <button type="submit" class="btn btn-default">Submit</button>
+		    <button type="submit" class="btn btn-success">Save</button>
+		    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
   </form>
   
   

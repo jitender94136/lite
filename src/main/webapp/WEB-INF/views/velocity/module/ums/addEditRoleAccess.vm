@@ -16,7 +16,8 @@
 																	</select>
 														    </div>
 												    #end
-													<button type="submit" class="btn btn-default">Submit</button>
+													<button type="submit" class="btn btn-success">Save</button>
+													<button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
 										  </form>
 
 										  
@@ -43,6 +44,7 @@
 				  						moduleMenuMapping = moduleMenuMapping.substring(0,moduleMenuMapping.length - 1);
 				  					}
 				  					console.log(moduleMenuMapping);
+				  					
 				  					//return false;
 				  					$.ajax({
 				  								type : 'POST',
@@ -52,7 +54,9 @@
 				  											if(data > 0) {
 				  													$("#addeditrolemodal").modal("hide");
 				  													alert('Role Mapping Saved/Updated Successfully...');
-				  											} else {
+				  											} else if(data == -1) {
+				  													alert('Role already exists...');
+				  											} else if(data == 0) {
 				  													alert('Unable to process your request....');
 				  											}
 				  								},

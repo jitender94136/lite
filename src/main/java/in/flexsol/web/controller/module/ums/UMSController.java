@@ -4,6 +4,7 @@ import in.flexsol.modal.menu.Menu;
 import in.flexsol.modal.module.Module;
 import in.flexsol.modal.user.Role;
 import in.flexsol.modal.user.User;
+import in.flexsol.modal.usermodulerolemapping.UserModuleRoleMapping;
 import in.flexsol.service.login.LoginService;
 import in.flexsol.service.module.ModuleService;
 import in.flexsol.service.ums.UMSService;
@@ -125,15 +126,15 @@ public class UMSController {
 			try {		
 						User user = loginService.getUserData(userId);
 						List<Module> modulesList = moduleService.finAllModules();
-						List<Module> userMappedModules = moduleService.getModulesList(user);
-						List<Integer> userMappedModulesList = new ArrayList<Integer>();
-						for(Module module  : userMappedModules) {
-									userMappedModulesList.add(module.getId());
-						}
 						List<Role> rolesList = umsService.findAllRoles();
+						//List<Module> userMappedModules = moduleService.getModulesList(user);
+						List<UserModuleRoleMapping> userModuleRoleMappingList = moduleService.userModuleRoleMappingList(user);
+						List<Integer> userMappedModuleIdsList = moduleService.getUserMappedModulesIdsList(userModuleRoleMappingList);
+						Map<Integer,List<Integer>> moduleMappedRoleIdsMap = moduleService.getModuleMappedRoleIdsMap(userModuleRoleMappingList);
 						model.addAttribute("user", user);
 						model.addAttribute("modulesList", modulesList);
-						model.addAttribute("userMappedModulesList", userMappedModulesList);
+						model.addAttribute("userMappedModuleIdsList", userMappedModuleIdsList);
+						model.addAttribute("moduleMappedRoleIdsMap", moduleMappedRoleIdsMap);
 						model.addAttribute("rolesList", rolesList);
 						return "module/ums/editUserModuleMapping";
 			} catch(Exception e) {
@@ -204,11 +205,11 @@ public class UMSController {
 		try {
 				User user = (User) httpSession.getAttribute(Constants.USER);
 				role.setCreatedBy(user.getId());
-				umsService.insertUpdateRoleAcess(role,moduleMenuMapping);
-				return 1;
+				int status = umsService.insertUpdateRoleAcess(role,moduleMenuMapping);
+				return status;
 		} catch(Exception e) {
 				e.printStackTrace();
-				return -1;
+				return 0;
 		}
 	}
 	

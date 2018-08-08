@@ -4,38 +4,55 @@
 <div id="addeditrolemodal" class="modal fade" role="dialog">
 		  <div class="modal-dialog">
 		    	    <div class="modal-content">
+								  <div   class="modal-header modalhead" >
+								      				
+								  					<p> <b> Manage Role </b>  </p>
+								  		
+								  </div>
 							      <div id="addeditrolemodalbody"  class="modal-body">
 							      				
 							      					<p>  Processing  </p>
 							      		
-							      </div>
-							      <div class="modal-footer">
-							      				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 							      </div>
 				    </div>
 		  </div>
 </div>
 
 
+<section class="content-header">
+<ol class="breadcrumb" >
+		<li > <a style="cursor:pointer"> <i class="fa fa-dashboard"> </i> UMS </a></li>
+		<li class="active" ><a style="cursor:pointer"><i class="fa fa-dashboard"></i> Manage Role </a></li>
+</ol>
+</section>
+
+<section class="content" >
+	  <div class="row" >
+			  		<div class="col-md-12 col-sm-12 col-xs-12">
+							
+							<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addusermodal"  onclick="addEditRoleAccess(0)" style="margin-bottom:5px;" >Add Role</button>
+							
+							<table   class="table table-bordered" >
+											<thead>
+														<th> Role </th>
+														<th> Actions </th>
+											</thead>
+											<tbody>
+											   #foreach($s in $!rolesList)
+													<tr>
+														  <td> $!s.role </td>
+														  <td> <i class="glyphicon glyphicon-edit" title="Edit Role" onclick="addEditRoleAccess($!s.id)" > </i>  </td>
+													</tr>	
+												#end	
+											</tbody>
+							
+							</table>
+
+					</div>
+				</div>
+</section>
 
 
-<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addusermodal"  onclick="addEditRoleAccess(0)" style="margin-bottom:5px;" >Add Role</button>
-
-<table   class="table table-bordered" >
-				<thead>
-							<th> Role </th>
-							<th> Actions </th>
-				</thead>
-				<tbody>
-				   #foreach($s in $!rolesList)
-						<tr>
-							  <td> $!s.role </td>
-							  <td> <i class="glyphicon glyphicon-edit" alt="Edit Role" onclick="addEditRoleAccess($!s.id)" > </i>  </td>
-						</tr>	
-					#end	
-				</tbody>
-
-</table>
 
 
 
@@ -43,6 +60,7 @@
 
 
 function addEditRoleAccess(roleId) {
+	
 	$("#addeditrolemodalbody").html('<p> Processing... </p>')
 	$("#addeditrolemodal").modal("show");
 	$.ajax({
@@ -54,6 +72,11 @@ function addEditRoleAccess(roleId) {
 							$("#addeditrolemodal").modal("hide");
 							alert('Unable to process your request...');
 					} else {
+							if(roleId == 0) {
+								$("#addeditrolemodal .modal-header").html("<p> <b> Add Role </b> </p>");
+							} else {
+								$("#addeditrolemodal .modal-header").html("<p> <b> Edit Role </b> </p>");
+							}
 							$("#addeditrolemodalbody").html(data);	
 					}
 				},

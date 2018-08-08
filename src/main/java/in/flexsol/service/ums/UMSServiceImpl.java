@@ -50,7 +50,11 @@ public class UMSServiceImpl implements UMSService {
 
 	@Override
 	@Transactional
-	public void insertUpdateRoleAcess(Role role, String moduleMenuMapping) {
+	public int insertUpdateRoleAcess(Role role, String moduleMenuMapping) {
+		int roleId = umsDao.insertUpdateRole(role);
+		if(roleId == -1) {
+			return -1;
+		}
 		String moduleMenuMappingArr[] = moduleMenuMapping.split("-");
 		List<String> menusList = new ArrayList<String>();
 		for(int i = 0; i < moduleMenuMappingArr.length; i++) {
@@ -63,8 +67,8 @@ public class UMSServiceImpl implements UMSService {
 					  	}
 				  }
 		}
-		int roleId = umsDao.insertUpdateRole(role);
 		umsDao.batchUpdateMenuAccess(role.getCreatedBy(),roleId,menusList);
+		return 1;
 	}
 
 

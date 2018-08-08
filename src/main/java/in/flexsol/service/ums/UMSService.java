@@ -16,7 +16,7 @@ public interface UMSService {
 	
 	List<Role> findAllRoles();
 
-	void insertUpdateRoleAcess(Role role, String roleMenuMapping);
+	int insertUpdateRoleAcess(Role role, String roleMenuMapping);
 
 	void insertUpdateModuleMapping(User user, String moduleToRoleMapping);
 

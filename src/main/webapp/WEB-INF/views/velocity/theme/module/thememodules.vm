@@ -1,0 +1,51 @@
+#set($!pagetitle="Home|FiLite")
+#parse("/WEB-INF/views/velocity/theme/layout/themeheader.vm")
+
+
+<div class="content-wrapper" style="margin-left:0px">
+					<!-- page title and breadcrumb -->
+					<section class="content-header">
+					  <h1>
+					    		Modules
+					  </h1>
+					</section>
+					<!-- Main content -->
+					<section class="content">
+					#if($!status == -2)
+						 Please contact your system administrator for module assignment...
+					#elseif($!status == -1)
+						 you are not authorized to access this module. Please find below the list of authorized module...
+					#elseif($!status == 0) 
+						Unable to process your request.Please try after some time....
+					#elseif($!moduleList.size() == 0)
+						Please contact your system administrator to map you the relevant modules...
+					#else
+						 List of available modules:- <br/><br/>
+					#end
+					<div class="row">
+										#foreach($!s in $moduleList) 
+											        <div class="col-md-3 col-sm-6 col-xs-12">
+													          <div class="info-box">
+													            	<span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+										
+														            <div class="info-box-content">
+														              <span class="info-box-text"><a href="modules/$!s.id" > $!s.moduleName  </a>  <br/></span>
+														              <!-- <span class="info-box-number">1,410</span>  -->
+														            </div>
+													            <!-- /.info-box-content -->
+													          </div>
+										          <!-- /.info-box -->
+										            </div>
+										        <!-- /.col -->
+										#end
+					</div>
+							
+					
+					</section>
+</div>		
+<style type="text/css">
+			.main-footer {
+				margin-left:0px;
+			}
+</style>
+#parse("/WEB-INF/views/velocity/theme/layout/themefooter.vm")

@@ -51,4 +51,9 @@
     <beans:beans profile="dev">
 			<context:property-placeholder location="classpath:application-dev.properties"  ignore-unresolvable="true"/>
 	</beans:beans>
+	<beans:beans profile="prod">
+			<context:property-placeholder location="classpath:application-prod.properties"  ignore-unresolvable="true"/>
+	</beans:beans>
+	
+	
 </beans:beans>
