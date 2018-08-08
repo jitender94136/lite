@@ -47,7 +47,28 @@
    						background-color : #3c8dbc;
    						color : white;
    					}	
+   					.marginabove {
+   						margin-top : 20px;
+   					}
+   					
+   					.marginbelow {
+   						margin-bottom : 20px;
+   					}
    </style>
+   
+   <script type="text/javascript">
+		   function paginateTable(obj) {
+					var dataTableObj = $('#'+obj.elementId).DataTable({
+					      'paging'      : typeof obj.paging === "undefined" ? true : obj.paging,
+					      'lengthChange': typeof obj.lengthChange === "undefined" ? true : obj.lengthChange,
+					      'searching'   : typeof obj.lengthChange === "undefined" ? true : obj.searching,
+					      'ordering'    : typeof obj.ordering === "undefined" ? true : obj.ordering,
+					      'info'        : typeof obj.info === "undefined" ? true : obj.info,
+					      'autoWidth'   : typeof obj.autoWidth === "undefined" ? true : obj.autoWidth
+					});
+					return dataTableObj;
+		   }	    
+   </script>
    
   </head>
 

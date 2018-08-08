@@ -11,7 +11,7 @@
 			  <div class="row" >
 					  		<div class="col-md-12 col-sm-12 col-xs-12">
 											<br/><br/>
-											<table  class="table table-bordered">
+											<table  class="table table-bordered" id="usermodulegrid">
 															<thead>
 																		<th> User Code  </th>
 																		<th> First Name  </th>
@@ -42,7 +42,10 @@
 
 
 <script type="text/javascript">
-
+			$(document).ready(function() {
+				 paginateTable({elementId : "usermodulegrid" , ordering : false });
+				
+			});
 			function editUserModuleMapping(userId) {
 					$("#modalbody").html('<p> Processing... </p>');	
 				    $("#mymodal").modal("show");		

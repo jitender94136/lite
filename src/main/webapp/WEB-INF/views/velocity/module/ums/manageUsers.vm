@@ -55,9 +55,9 @@
 <section class="content" >
 			  <div class="row" >
 					  		<div class="col-md-12 col-sm-12 col-xs-12">
-									  		<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addusermodal" onclick='$("#adduserform").trigger("reset");' style="margin-bottom:5px;"  >Add User</button>
+									  		<button type="button" class="btn btn-info btn-sm marginbelow" data-toggle="modal" data-target="#addusermodal" onclick='$("#adduserform").trigger("reset");'   >Add User</button>
 				
-									  		<table  class="table table-bordered">
+									  		<table  class="table table-bordered" id="usergrid" >
 									  						<thead>
 									  									<th> User Code  </th>
 									  									<th> First Name  </th>
@@ -93,6 +93,10 @@
 
 
 <script type="text/javascript">
+			$(document).ready(function() {
+				    paginateTable({elementId : "usergrid" , ordering : false });
+			});
+
 			function editUserScreen(userId) {
 					$("#mymodal").modal("show");
 					$.ajax({
