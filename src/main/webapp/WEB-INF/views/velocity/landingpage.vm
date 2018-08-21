@@ -5,6 +5,8 @@
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <title>Login and Registration Form</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel='shortcut icon' href='/filiteassets/fi.ico' type='image/x-icon' />
+        
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
         
